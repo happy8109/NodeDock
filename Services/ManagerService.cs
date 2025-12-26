@@ -107,5 +107,32 @@ namespace NodeDock.Services
         }
 
         public List<NodeRuntimeInfo> GetRuntimes() => _scanner.Scan();
+
+        public void OpenTerminal(string appId)
+        {
+            var app = ConfigService.Instance.Settings.AppList.FirstOrDefault(a => a.Id == appId);
+            if (app == null) return;
+
+            var runtimes = _scanner.Scan();
+            var runtime = runtimes.FirstOrDefault(r => r.Name == app.NodeVersion)
+                          ?? runtimes.FirstOrDefault(r => r.Name == ConfigService.Instance.Settings.DefaultNodeVersion)
+                          ?? runtimes.FirstOrDefault();
+
+            if (runtime == null) return;
+
+            string runtimeDir = System.IO.Path.GetDirectoryName(runtime.ExePath);
+            string oldPath = Environment.GetEnvironmentVariable("PATH");
+
+            var startInfo = new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = "cmd.exe",
+                WorkingDirectory = app.WorkingDirectory,
+                UseShellExecute = false
+            };
+            // 注入环境路径
+            startInfo.EnvironmentVariables["PATH"] = runtimeDir + ";" + oldPath;
+
+            System.Diagnostics.Process.Start(startInfo);
+        }
     }
 }

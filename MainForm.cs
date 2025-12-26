@@ -160,6 +160,15 @@ namespace NodeDock
             }
         }
 
+        private void btnOpenTerminal_Click(object sender, EventArgs e)
+        {
+            if (lvApps.SelectedItems.Count > 0)
+            {
+                var app = lvApps.SelectedItems[0].Tag as Models.AppItem;
+                ManagerService.Instance.OpenTerminal(app.Id);
+            }
+        }
+
         private void lvApps_SelectedIndexChanged(object sender, EventArgs e)
         {
             bool hasSelection = lvApps.SelectedItems.Count > 0;
@@ -167,6 +176,7 @@ namespace NodeDock
             btnRemoveApp.Enabled = hasSelection;
             btnStartApp.Enabled = hasSelection;
             btnStopApp.Enabled = hasSelection;
+            btnOpenTerminal.Enabled = hasSelection;
 
             txtLog.Clear();
             if (hasSelection)

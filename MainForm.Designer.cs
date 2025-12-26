@@ -32,6 +32,7 @@ namespace NodeDock
             this.btnRemoveApp = new System.Windows.Forms.Button();
             this.btnStartApp = new System.Windows.Forms.Button();
             this.btnStopApp = new System.Windows.Forms.Button();
+            this.btnOpenTerminal = new System.Windows.Forms.Button();
             this.pnlLog = new System.Windows.Forms.Panel();
             this.txtLog = new System.Windows.Forms.RichTextBox();
             this.lblLogTitle = new System.Windows.Forms.Label();
@@ -189,6 +190,7 @@ namespace NodeDock
             // 
             // pnlAppToolbar
             // 
+            this.pnlAppToolbar.Controls.Add(this.btnOpenTerminal);
             this.pnlAppToolbar.Controls.Add(this.btnStopApp);
             this.pnlAppToolbar.Controls.Add(this.btnStartApp);
             this.pnlAppToolbar.Controls.Add(this.btnRemoveApp);
@@ -245,6 +247,17 @@ namespace NodeDock
             this.btnStopApp.UseVisualStyleBackColor = true;
             this.btnStopApp.Click += new System.EventHandler(this.btnStopApp_Click);
             // 
+            // btnOpenTerminal
+            // 
+            this.btnOpenTerminal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnOpenTerminal.Location = new System.Drawing.Point(180, 10);
+            this.btnOpenTerminal.Name = "btnOpenTerminal";
+            this.btnOpenTerminal.Size = new System.Drawing.Size(80, 30);
+            this.btnOpenTerminal.TabIndex = 4;
+            this.btnOpenTerminal.Text = "终端";
+            this.btnOpenTerminal.UseVisualStyleBackColor = true;
+            this.btnOpenTerminal.Click += new System.EventHandler(this.btnOpenTerminal_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -280,6 +293,7 @@ namespace NodeDock
         private System.Windows.Forms.Button btnRemoveApp;
         private System.Windows.Forms.Button btnStartApp;
         private System.Windows.Forms.Button btnStopApp;
+        private System.Windows.Forms.Button btnOpenTerminal;
         private System.Windows.Forms.Panel pnlLog;
         private System.Windows.Forms.RichTextBox txtLog;
         private System.Windows.Forms.Label lblLogTitle;
