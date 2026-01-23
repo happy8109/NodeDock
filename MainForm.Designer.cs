@@ -15,35 +15,33 @@ namespace NodeDock
 
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.pnlSidebar = new System.Windows.Forms.Panel();
             this.btnAddApp = new System.Windows.Forms.Button();
             this.btnStopAll = new System.Windows.Forms.Button();
             this.btnStartAll = new System.Windows.Forms.Button();
             this.lblLogo = new System.Windows.Forms.Label();
             this.pnlMain = new System.Windows.Forms.Panel();
-            this.lvApps = new System.Windows.Forms.ListView();
-            this.colName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colVersion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colPath = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.pnlAppToolbar = new System.Windows.Forms.Panel();
-            this.btnEditApp = new System.Windows.Forms.Button();
-            this.btnRemoveApp = new System.Windows.Forms.Button();
-            this.btnStartApp = new System.Windows.Forms.Button();
-            this.btnStopApp = new System.Windows.Forms.Button();
-            this.btnOpenTerminal = new System.Windows.Forms.Button();
+            this.dgvApps = new System.Windows.Forms.DataGridView();
+            this.colIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colPath = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colAction = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlLog = new System.Windows.Forms.Panel();
             this.txtLog = new System.Windows.Forms.RichTextBox();
             this.lblLogTitle = new System.Windows.Forms.Label();
-            this.pnlAppToolbar = new System.Windows.Forms.Panel();
-            this.btnStopApp = new System.Windows.Forms.Button();
-            this.btnStartApp = new System.Windows.Forms.Button();
-            this.btnRemoveApp = new System.Windows.Forms.Button();
-            this.btnEditApp = new System.Windows.Forms.Button();
             this.pnlSidebar.SuspendLayout();
             this.pnlMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvApps)).BeginInit();
             this.pnlLog.SuspendLayout();
-            this.pnlAppToolbar.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlSidebar
@@ -111,9 +109,8 @@ namespace NodeDock
             // 
             // pnlMain
             // 
-            this.pnlMain.Controls.Add(this.lvApps);
+            this.pnlMain.Controls.Add(this.dgvApps);
             this.pnlMain.Controls.Add(this.pnlLog);
-            this.pnlMain.Controls.Add(this.pnlAppToolbar);
             this.pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlMain.Location = new System.Drawing.Point(200, 0);
             this.pnlMain.Name = "pnlMain";
@@ -121,48 +118,108 @@ namespace NodeDock
             this.pnlMain.Size = new System.Drawing.Size(700, 600);
             this.pnlMain.TabIndex = 1;
             // 
-            // lvApps
+            // dgvApps
             // 
-            this.lvApps.BackColor = System.Drawing.Color.White;
-            this.lvApps.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.lvApps.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.dgvApps.AllowUserToAddRows = false;
+            this.dgvApps.AllowUserToDeleteRows = false;
+            this.dgvApps.AllowUserToResizeRows = false;
+            this.dgvApps.BackgroundColor = System.Drawing.Color.White;
+            this.dgvApps.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvApps.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
+            this.dgvApps.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvApps.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colIndex,
             this.colName,
             this.colStatus,
             this.colVersion,
-            this.colPath});
-            this.lvApps.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lvApps.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
-            this.lvApps.FullRowSelect = true;
-            this.lvApps.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.lvApps.HideSelection = false;
-            this.lvApps.Location = new System.Drawing.Point(10, 60);
-            this.lvApps.MultiSelect = false;
-            this.lvApps.Name = "lvApps";
-            this.lvApps.Size = new System.Drawing.Size(680, 330);
-            this.lvApps.TabIndex = 0;
-            this.lvApps.UseCompatibleStateImageBehavior = false;
-            this.lvApps.View = System.Windows.Forms.View.Details;
-            this.lvApps.SelectedIndexChanged += new System.EventHandler(this.lvApps_SelectedIndexChanged);
+            this.colPath,
+            this.colAction});
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(234)))), ((int)(((byte)(254)))));
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvApps.DefaultCellStyle = dataGridViewCellStyle7;
+            this.dgvApps.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvApps.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(229)))), ((int)(((byte)(231)))), ((int)(((byte)(235)))));
+            this.dgvApps.Location = new System.Drawing.Point(10, 10);
+            this.dgvApps.MultiSelect = false;
+            this.dgvApps.Name = "dgvApps";
+            this.dgvApps.ReadOnly = true;
+            this.dgvApps.RowHeadersVisible = false;
+            this.dgvApps.RowTemplate.Height = 36;
+            this.dgvApps.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvApps.Size = new System.Drawing.Size(680, 380);
+            this.dgvApps.TabIndex = 0;
+            this.dgvApps.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvApps_CellClick);
+            this.dgvApps.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvApps_CellPainting);
+            this.dgvApps.SelectionChanged += new System.EventHandler(this.dgvApps_SelectionChanged);
+            // 
+            // colIndex
+            // 
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colIndex.DefaultCellStyle = dataGridViewCellStyle1;
+            this.colIndex.HeaderText = "#";
+            this.colIndex.Name = "colIndex";
+            this.colIndex.ReadOnly = true;
+            this.colIndex.Width = 40;
+            this.colIndex.HeaderCell.Style.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colIndex.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // colName
             // 
-            this.colName.Text = "应用名称";
-            this.colName.Width = 150;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colName.DefaultCellStyle = dataGridViewCellStyle2;
+            this.colName.HeaderText = "应用名称";
+            this.colName.Name = "colName";
+            this.colName.ReadOnly = true;
+            this.colName.Width = 140;
+            this.colName.HeaderCell.Style.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // colStatus
             // 
-            this.colStatus.Text = "状态";
-            this.colStatus.Width = 100;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colStatus.DefaultCellStyle = dataGridViewCellStyle3;
+            this.colStatus.HeaderText = "状态";
+            this.colStatus.Name = "colStatus";
+            this.colStatus.ReadOnly = true;
+            this.colStatus.Width = 80;
+            this.colStatus.HeaderCell.Style.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colStatus.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // colVersion
             // 
-            this.colVersion.Text = "Node 版本";
-            this.colVersion.Width = 120;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colVersion.DefaultCellStyle = dataGridViewCellStyle4;
+            this.colVersion.HeaderText = "Node 版本";
+            this.colVersion.Name = "colVersion";
+            this.colVersion.ReadOnly = true;
+            this.colVersion.HeaderCell.Style.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colVersion.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // colPath
             // 
-            this.colPath.Text = "工作目录";
-            this.colPath.Width = 300;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.colPath.DefaultCellStyle = dataGridViewCellStyle5;
+            this.colPath.HeaderText = "工作目录";
+            this.colPath.Name = "colPath";
+            this.colPath.ReadOnly = true;
+            this.colPath.Width = 200;
+            this.colPath.HeaderCell.Style.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colPath.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // colAction
+            // 
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colAction.DefaultCellStyle = dataGridViewCellStyle6;
+            this.colAction.HeaderText = "操作";
+            this.colAction.Name = "colAction";
+            this.colAction.ReadOnly = true;
+            this.colAction.HeaderCell.Style.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colAction.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             // 
             // pnlLog
             // 
@@ -177,7 +234,7 @@ namespace NodeDock
             // txtLog
             // 
             this.txtLog.BackColor = System.Drawing.Color.White;
-            this.txtLog.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtLog.Font = new System.Drawing.Font("Consolas", 9F);
             this.txtLog.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
@@ -200,77 +257,6 @@ namespace NodeDock
             this.lblLogTitle.Text = "实时日志预览 (仅显示当前选中项)";
             this.lblLogTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // pnlAppToolbar
-            // 
-            this.pnlAppToolbar.Controls.Add(this.btnOpenTerminal);
-            this.pnlAppToolbar.Controls.Add(this.btnStopApp);
-            this.pnlAppToolbar.Controls.Add(this.btnStartApp);
-            this.pnlAppToolbar.Controls.Add(this.btnRemoveApp);
-            this.pnlAppToolbar.Controls.Add(this.btnEditApp);
-            this.pnlAppToolbar.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlAppToolbar.Location = new System.Drawing.Point(10, 10);
-            this.pnlAppToolbar.Name = "pnlAppToolbar";
-            this.pnlAppToolbar.Size = new System.Drawing.Size(680, 50);
-            this.pnlAppToolbar.TabIndex = 1;
-            // 
-            // btnStopApp
-            // 
-            this.btnStopApp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnStopApp.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
-            this.btnStopApp.Location = new System.Drawing.Point(600, 10);
-            this.btnStopApp.Name = "btnStopApp";
-            this.btnStopApp.Size = new System.Drawing.Size(80, 30);
-            this.btnStopApp.TabIndex = 3;
-            this.btnStopApp.Text = "停止";
-            this.btnStopApp.UseVisualStyleBackColor = true;
-            this.btnStopApp.Click += new System.EventHandler(this.btnStopApp_Click);
-            // 
-            // btnStartApp
-            // 
-            this.btnStartApp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnStartApp.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(197)))), ((int)(((byte)(94)))));
-            this.btnStartApp.Location = new System.Drawing.Point(510, 10);
-            this.btnStartApp.Name = "btnStartApp";
-            this.btnStartApp.Size = new System.Drawing.Size(80, 30);
-            this.btnStartApp.TabIndex = 2;
-            this.btnStartApp.Text = "启动";
-            this.btnStartApp.UseVisualStyleBackColor = true;
-            this.btnStartApp.Click += new System.EventHandler(this.btnStartApp_Click);
-            // 
-            // btnRemoveApp
-            // 
-            this.btnRemoveApp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRemoveApp.Location = new System.Drawing.Point(90, 10);
-            this.btnRemoveApp.Name = "btnRemoveApp";
-            this.btnRemoveApp.Size = new System.Drawing.Size(80, 30);
-            this.btnRemoveApp.TabIndex = 1;
-            this.btnRemoveApp.Text = "删除";
-            this.btnRemoveApp.UseVisualStyleBackColor = true;
-            this.btnRemoveApp.Click += new System.EventHandler(this.btnRemoveApp_Click);
-            // 
-            // btnEditApp
-            // 
-            this.btnEditApp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnEditApp.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(65)))), ((int)(((byte)(81)))));
-            this.btnEditApp.Location = new System.Drawing.Point(0, 10);
-            this.btnEditApp.Name = "btnEditApp";
-            this.btnEditApp.Size = new System.Drawing.Size(80, 30);
-            this.btnEditApp.TabIndex = 0;
-            this.btnEditApp.Text = "编辑";
-            this.btnEditApp.UseVisualStyleBackColor = true;
-            this.btnEditApp.Click += new System.EventHandler(this.btnEditApp_Click);
-            // 
-            // btnOpenTerminal
-            // 
-            this.btnOpenTerminal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnOpenTerminal.Location = new System.Drawing.Point(180, 10);
-            this.btnOpenTerminal.Name = "btnOpenTerminal";
-            this.btnOpenTerminal.Size = new System.Drawing.Size(80, 30);
-            this.btnOpenTerminal.TabIndex = 4;
-            this.btnOpenTerminal.Text = "终端";
-            this.btnOpenTerminal.UseVisualStyleBackColor = true;
-            this.btnOpenTerminal.Click += new System.EventHandler(this.btnOpenTerminal_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -285,8 +271,8 @@ namespace NodeDock
             this.Text = "NodeDock - Node.js 应用管理";
             this.pnlSidebar.ResumeLayout(false);
             this.pnlMain.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvApps)).EndInit();
             this.pnlLog.ResumeLayout(false);
-            this.pnlAppToolbar.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -297,17 +283,13 @@ namespace NodeDock
         private System.Windows.Forms.Button btnStopAll;
         private System.Windows.Forms.Button btnAddApp;
         private System.Windows.Forms.Panel pnlMain;
-        private System.Windows.Forms.ListView lvApps;
-        private System.Windows.Forms.ColumnHeader colName;
-        private System.Windows.Forms.ColumnHeader colStatus;
-        private System.Windows.Forms.ColumnHeader colVersion;
-        private System.Windows.Forms.ColumnHeader colPath;
-        private System.Windows.Forms.Panel pnlAppToolbar;
-        private System.Windows.Forms.Button btnEditApp;
-        private System.Windows.Forms.Button btnRemoveApp;
-        private System.Windows.Forms.Button btnStartApp;
-        private System.Windows.Forms.Button btnStopApp;
-        private System.Windows.Forms.Button btnOpenTerminal;
+        private System.Windows.Forms.DataGridView dgvApps;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colIndex;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colVersion;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colPath;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colAction;
         private System.Windows.Forms.Panel pnlLog;
         private System.Windows.Forms.RichTextBox txtLog;
         private System.Windows.Forms.Label lblLogTitle;

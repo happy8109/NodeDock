@@ -30,6 +30,12 @@ namespace NodeDock.Services
             {
                 CreateWorker(app, availableRuntimes);
             }
+            
+            // 自动启动标记了 AutoStart 的应用
+            foreach (var app in settings.AppList.Where(a => a.AutoStart))
+            {
+                StartApp(app.Id);
+            }
         }
 
         private void CreateWorker(AppItem app, List<NodeRuntimeInfo> runtimes)
