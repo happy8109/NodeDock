@@ -28,6 +28,7 @@ namespace NodeDock
             this.label5 = new System.Windows.Forms.Label();
             this.txtArgs = new System.Windows.Forms.TextBox();
             this.chkAutoStart = new System.Windows.Forms.CheckBox();
+            this.btnDownloadNode = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -43,9 +44,9 @@ namespace NodeDock
             // 
             // txtName
             // 
-            this.txtName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.txtName.BackColor = System.Drawing.Color.White;
             this.txtName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtName.ForeColor = System.Drawing.Color.White;
+            this.txtName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(24)))), ((int)(((byte)(39)))));
             this.txtName.Location = new System.Drawing.Point(120, 27);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(280, 21);
@@ -62,9 +63,9 @@ namespace NodeDock
             // 
             // txtWorkDir
             // 
-            this.txtWorkDir.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.txtWorkDir.BackColor = System.Drawing.Color.White;
             this.txtWorkDir.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtWorkDir.ForeColor = System.Drawing.Color.White;
+            this.txtWorkDir.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(24)))), ((int)(((byte)(39)))));
             this.txtWorkDir.Location = new System.Drawing.Point(120, 67);
             this.txtWorkDir.Name = "txtWorkDir";
             this.txtWorkDir.Size = new System.Drawing.Size(220, 21);
@@ -92,9 +93,9 @@ namespace NodeDock
             // 
             // txtScript
             // 
-            this.txtScript.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.txtScript.BackColor = System.Drawing.Color.White;
             this.txtScript.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtScript.ForeColor = System.Drawing.Color.White;
+            this.txtScript.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(24)))), ((int)(((byte)(39)))));
             this.txtScript.Location = new System.Drawing.Point(120, 107);
             this.txtScript.Name = "txtScript";
             this.txtScript.Size = new System.Drawing.Size(220, 21);
@@ -122,14 +123,14 @@ namespace NodeDock
             // 
             // cmbVersion
             // 
-            this.cmbVersion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.cmbVersion.BackColor = System.Drawing.Color.White;
             this.cmbVersion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbVersion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbVersion.ForeColor = System.Drawing.Color.White;
+            this.cmbVersion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(24)))), ((int)(((byte)(39)))));
             this.cmbVersion.FormattingEnabled = true;
             this.cmbVersion.Location = new System.Drawing.Point(120, 147);
             this.cmbVersion.Name = "cmbVersion";
-            this.cmbVersion.Size = new System.Drawing.Size(280, 20);
+            this.cmbVersion.Size = new System.Drawing.Size(210, 20);
             this.cmbVersion.TabIndex = 9;
             // 
             // label5
@@ -143,9 +144,9 @@ namespace NodeDock
             // 
             // txtArgs
             // 
-            this.txtArgs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.txtArgs.BackColor = System.Drawing.Color.White;
             this.txtArgs.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtArgs.ForeColor = System.Drawing.Color.White;
+            this.txtArgs.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(24)))), ((int)(((byte)(39)))));
             this.txtArgs.Location = new System.Drawing.Point(120, 187);
             this.txtArgs.Name = "txtArgs";
             this.txtArgs.Size = new System.Drawing.Size(280, 21);
@@ -161,34 +162,48 @@ namespace NodeDock
             this.chkAutoStart.Text = "管理器启动时自启动";
             this.chkAutoStart.UseVisualStyleBackColor = true;
             // 
+            // btnDownloadNode
+            // 
+            this.btnDownloadNode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDownloadNode.Location = new System.Drawing.Point(340, 146);
+            this.btnDownloadNode.Name = "btnDownloadNode";
+            this.btnDownloadNode.Size = new System.Drawing.Size(60, 23);
+            this.btnDownloadNode.TabIndex = 10;
+            this.btnDownloadNode.Text = "下载...";
+            this.btnDownloadNode.UseVisualStyleBackColor = true;
+            this.btnDownloadNode.Click += new System.EventHandler(this.btnDownloadNode_Click);
+            // 
             // btnSave
             // 
+            this.btnSave.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(130)))), ((int)(((byte)(246)))));
             this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSave.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(200)))), ((int)(((byte)(75)))));
+            this.btnSave.ForeColor = System.Drawing.Color.White;
             this.btnSave.Location = new System.Drawing.Point(240, 260);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 30);
             this.btnSave.TabIndex = 13;
             this.btnSave.Text = "保存";
-            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.UseVisualStyleBackColor = false;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // btnCancel
             // 
+            this.btnCancel.BackColor = System.Drawing.Color.White;
             this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnCancel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(65)))), ((int)(((byte)(81)))));
             this.btnCancel.Location = new System.Drawing.Point(325, 260);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 30);
             this.btnCancel.TabIndex = 14;
             this.btnCancel.Text = "取消";
-            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.UseVisualStyleBackColor = false;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // AddAppForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(250)))), ((int)(((byte)(251)))));
             this.ClientSize = new System.Drawing.Size(434, 311);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
@@ -204,8 +219,9 @@ namespace NodeDock
             this.Controls.Add(this.txtWorkDir);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtName);
+            this.Controls.Add(this.btnDownloadNode);
             this.Controls.Add(this.label1);
-            this.ForeColor = System.Drawing.Color.White;
+            this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(65)))), ((int)(((byte)(81)))));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -232,5 +248,6 @@ namespace NodeDock
         private System.Windows.Forms.CheckBox chkAutoStart;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnCancel;
+        private System.Windows.Forms.Button btnDownloadNode;
     }
 }

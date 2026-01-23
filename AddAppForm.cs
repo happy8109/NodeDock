@@ -10,7 +10,7 @@ namespace NodeDock
     public partial class AddAppForm : Form
     {
         public AppItem AppInfo { get; private set; }
-        private bool _isEdit;
+
 
         public AddAppForm(AppItem app = null)
         {
@@ -19,7 +19,6 @@ namespace NodeDock
 
             if (app != null)
             {
-                _isEdit = true;
                 AppInfo = app;
                 Text = "编辑应用 - " + app.Name;
                 txtName.Text = app.Name;
@@ -31,7 +30,6 @@ namespace NodeDock
             }
             else
             {
-                _isEdit = false;
                 AppInfo = new AppItem();
                 Text = "添加新应用";
             }
@@ -98,6 +96,23 @@ namespace NodeDock
 
             this.DialogResult = DialogResult.OK;
             this.Close();
+        }
+
+        private void btnDownloadNode_Click(object sender, EventArgs e)
+        {
+            using (var form = new DownloadVersionForm())
+            {
+                if (form.ShowDialog() == DialogResult.OK)
+                {
+                    PopulateRuntimes();
+                    // 自动选中刚下载的版本
+                    if (!string.IsNullOrEmpty(form.DownloadedVersion))
+                    {
+                        cmbVersion.SelectedItem = cmbVersion.Items.Cast<NodeRuntimeInfo>()
+                            .FirstOrDefault(r => r.Name == form.DownloadedVersion);
+                    }
+                }
+            }
         }
 
         private void btnCancel_Click(object sender, EventArgs e)

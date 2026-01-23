@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using NodeDock.Models;
+using NodeDock.Utils;
 
 namespace NodeDock.Services
 {
@@ -11,6 +12,7 @@ namespace NodeDock.Services
         private Process _process;
         private readonly AppItem _app;
         private readonly string _nodeExePath;
+        private JobObject _jobObject;
         
         // 事件定义
         public event Action<string, string> OutputReceived; // (appId, message)
@@ -37,12 +39,52 @@ namespace NodeDock.Services
             {
                 OnStatusChanged(AppStatus.Starting);
 
+                // 创建作业对象以实现管理
+                _jobObject?.Dispose();
+                _jobObject = new JobObject();
+
                 _process = new Process();
-                _process.StartInfo.FileName = _nodeExePath;
+                string nodeDir = Path.GetDirectoryName(_nodeExePath);
                 
-                // 拼接参数: [Arguments] [EntryScript]
-                string args = string.IsNullOrEmpty(_app.Arguments) ? "" : _app.Arguments + " ";
-                _process.StartInfo.Arguments = args + $"\"{_app.EntryScript}\"";
+                // 智能识别启动类型
+                string entry = _app.EntryScript?.Trim() ?? "";
+                bool isNpm = entry.StartsWith("npm ", StringComparison.OrdinalIgnoreCase) || 
+                           entry.Equals("npm", StringComparison.OrdinalIgnoreCase);
+
+                if (isNpm)
+                {
+                    // 处理 npm 命令
+                    string npmPath = Path.Combine(nodeDir, "npm.cmd");
+                    if (!File.Exists(npmPath))
+                    {
+                        npmPath = "npm.cmd"; // 回退
+                    }
+
+                    _process.StartInfo.FileName = npmPath;
+                    
+                    // 提取 npm 后面的参数
+                    string npmArgs = entry.Length > 3 ? entry.Substring(4).Trim() : "";
+                    _process.StartInfo.Arguments = string.IsNullOrEmpty(_app.Arguments) 
+                        ? npmArgs 
+                        : $"{npmArgs} {_app.Arguments}";
+                }
+                else
+                {
+                    // 处理普通 node 执行
+                    _process.StartInfo.FileName = _nodeExePath;
+                    string args = string.IsNullOrEmpty(_app.Arguments) ? "" : _app.Arguments + " ";
+                    _process.StartInfo.Arguments = args + $"\"{_app.EntryScript}\"";
+                }
+
+                // 环境隔离
+                if (_process.StartInfo.EnvironmentVariables.ContainsKey("PATH"))
+                {
+                    _process.StartInfo.EnvironmentVariables["PATH"] = nodeDir + ";" + _process.StartInfo.EnvironmentVariables["PATH"];
+                }
+                else
+                {
+                    _process.StartInfo.EnvironmentVariables["PATH"] = nodeDir;
+                }
                 
                 _process.StartInfo.WorkingDirectory = _app.WorkingDirectory;
                 _process.StartInfo.CreateNoWindow = true;
@@ -61,12 +103,22 @@ namespace NodeDock.Services
                 _process.Exited += (s, e) => 
                 {
                     _app.StartTime = null;
-                    OnStatusChanged(AppStatus.Stopped);
+                    if (_app.Status != AppStatus.Error) OnStatusChanged(AppStatus.Stopped);
                     OnOutputReceived("--- 程序已退出 ---");
                 };
 
                 if (_process.Start())
                 {
+                    // 将进程添加到作业对象中
+                    try
+                    {
+                        _jobObject.AddProcess(_process.Handle);
+                    }
+                    catch (Exception ex)
+                    {
+                        OnOutputReceived($"警告：无法建立 Job 绑定 ({ex.Message})，子进程清理可能失效。");
+                    }
+
                     _process.BeginOutputReadLine();
                     _process.BeginErrorReadLine();
                     _app.StartTime = DateTime.Now;
@@ -88,11 +140,15 @@ namespace NodeDock.Services
         {
             try
             {
-                if (_process != null && !_process.HasExited)
+                if (_jobObject != null)
+                {
+                    // 释放 JobObject 会导致所有关联进程（包括子进程）被 Windows 自动终止
+                    _jobObject.Dispose();
+                    _jobObject = null;
+                }
+                else if (_process != null && !_process.HasExited)
                 {
                     _process.Kill();
-                    // 对于复杂的 Node 应用（如开启了子进程），可能需要更深层的 Process Tree Kill
-                    // 但基础实现先使用 Kill
                 }
             }
             catch (Exception ex)
@@ -112,6 +168,8 @@ namespace NodeDock.Services
         {
             Stop();
             _process?.Dispose();
+            _jobObject?.Dispose();
         }
     }
 }
+

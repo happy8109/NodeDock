@@ -82,10 +82,10 @@ namespace NodeDock
                     // 根据状态改变颜色
                     switch (status)
                     {
-                        case Models.AppStatus.Running: item.ForeColor = Color.FromArgb(140, 200, 75); break;
-                        case Models.AppStatus.Error: item.ForeColor = Color.Salmon; break;
-                        case Models.AppStatus.Stopped: item.ForeColor = Color.White; break;
-                        case Models.AppStatus.Starting: item.ForeColor = Color.SkyBlue; break;
+                        case Models.AppStatus.Running: item.ForeColor = Color.FromArgb(22, 163, 74); break; // 稳重的绿色
+                        case Models.AppStatus.Error: item.ForeColor = Color.FromArgb(220, 38, 38); break;   // 醒目的红色
+                        case Models.AppStatus.Stopped: item.ForeColor = Color.FromArgb(75, 85, 99); break; // 中灰色
+                        case Models.AppStatus.Starting: item.ForeColor = Color.FromArgb(37, 99, 235); break; // 亮蓝色
                     }
                     break;
                 }
@@ -227,9 +227,6 @@ namespace NodeDock
             }
         }
 
-        private void UpdateAppListUI(string id, Models.AppStatus status)
-        {
-            // TODO: 更新 UI 列表项的状态颜色
-        }
+
     }
 }
