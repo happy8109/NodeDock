@@ -13,7 +13,7 @@
 
 ## 🛠 开发背景
 
-本项目在设计与编码过程中，由 **Antigravity** (Google DeepMind 为 Advanced Agentic Coding 打造的 AI 辅助编码专家) 提供全程深度协作支持。从架构设计、核心引擎编写到 UI 交互逻辑，均凝结了 AI 与人类开发者的智慧结晶。
+本项目在设计与编码过程中，由 **Antigravity** (Google DeepMind 为 Advanced Agentic Coding 打造的 AI 辅助编码专家) 提供全程深度协作支持。
 
 ## 📂 目录结构
 
@@ -28,7 +28,7 @@ NodeDock/
 ## 📖 快速开始
 
 ### 1. 准备运行环境
-在 `runtimes` 文件夹下按版本号建立子文件夹（如 `v18.16.0`），并将下载好的 `node.exe` 放入其中。
+在 `runtimes` 文件夹下按版本号建立子文件夹（如 `v18.16.0`），并将下载好的 Node.js 免安装包内容（包含 `node.exe`、`npm.cmd` 及 `node_modules` 文件夹）放入其中。
 
 ### 2. 添加应用
 运行 NodeDock，点击“添加”按钮，选择您的 Node 项目路径、入口脚本并关联对应的 Node 版本。

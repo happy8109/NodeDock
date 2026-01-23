@@ -22,10 +22,16 @@ namespace NodeDock
             this.lblLogo = new System.Windows.Forms.Label();
             this.pnlMain = new System.Windows.Forms.Panel();
             this.lvApps = new System.Windows.Forms.ListView();
-            this.colName = new System.Windows.Forms.ColumnHeader();
-            this.colStatus = new System.Windows.Forms.ColumnHeader();
-            this.colVersion = new System.Windows.Forms.ColumnHeader();
-            this.colPath = new System.Windows.Forms.ColumnHeader();
+            this.colName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colVersion = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colPath = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.pnlAppToolbar = new System.Windows.Forms.Panel();
+            this.btnEditApp = new System.Windows.Forms.Button();
+            this.btnRemoveApp = new System.Windows.Forms.Button();
+            this.btnStartApp = new System.Windows.Forms.Button();
+            this.btnStopApp = new System.Windows.Forms.Button();
+            this.btnOpenTerminal = new System.Windows.Forms.Button();
             this.pnlLog = new System.Windows.Forms.Panel();
             this.txtLog = new System.Windows.Forms.RichTextBox();
             this.lblLogTitle = new System.Windows.Forms.Label();
@@ -196,6 +202,7 @@ namespace NodeDock
             // 
             // pnlAppToolbar
             // 
+            this.pnlAppToolbar.Controls.Add(this.btnOpenTerminal);
             this.pnlAppToolbar.Controls.Add(this.btnStopApp);
             this.pnlAppToolbar.Controls.Add(this.btnStartApp);
             this.pnlAppToolbar.Controls.Add(this.btnRemoveApp);
@@ -253,6 +260,17 @@ namespace NodeDock
             this.btnEditApp.UseVisualStyleBackColor = true;
             this.btnEditApp.Click += new System.EventHandler(this.btnEditApp_Click);
             // 
+            // btnOpenTerminal
+            // 
+            this.btnOpenTerminal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnOpenTerminal.Location = new System.Drawing.Point(180, 10);
+            this.btnOpenTerminal.Name = "btnOpenTerminal";
+            this.btnOpenTerminal.Size = new System.Drawing.Size(80, 30);
+            this.btnOpenTerminal.TabIndex = 4;
+            this.btnOpenTerminal.Text = "终端";
+            this.btnOpenTerminal.UseVisualStyleBackColor = true;
+            this.btnOpenTerminal.Click += new System.EventHandler(this.btnOpenTerminal_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -289,6 +307,7 @@ namespace NodeDock
         private System.Windows.Forms.Button btnRemoveApp;
         private System.Windows.Forms.Button btnStartApp;
         private System.Windows.Forms.Button btnStopApp;
+        private System.Windows.Forms.Button btnOpenTerminal;
         private System.Windows.Forms.Panel pnlLog;
         private System.Windows.Forms.RichTextBox txtLog;
         private System.Windows.Forms.Label lblLogTitle;

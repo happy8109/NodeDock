@@ -94,6 +94,14 @@ namespace NodeDock.Services
                 _process.StartInfo.StandardOutputEncoding = Encoding.UTF8;
                 _process.StartInfo.StandardErrorEncoding = Encoding.UTF8;
 
+                // 注入 PATH 环境变量，确保 npm 和其他工具可用
+                string runtimeDir = Path.GetDirectoryName(_nodeExePath);
+                if (Directory.Exists(runtimeDir))
+                {
+                    string oldPath = Environment.GetEnvironmentVariable("PATH");
+                    _process.StartInfo.EnvironmentVariables["PATH"] = runtimeDir + ";" + oldPath;
+                }
+
                 // 绑定输出流
                 _process.OutputDataReceived += (s, e) => { if (e.Data != null) OnOutputReceived(e.Data); };
                 _process.ErrorDataReceived += (s, e) => { if (e.Data != null) OnOutputReceived("[ERROR] " + e.Data); };
