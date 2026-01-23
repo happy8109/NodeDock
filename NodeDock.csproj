@@ -94,6 +94,7 @@
     <Compile Include="Services\ManagerService.cs" />
     <Compile Include="Services\NodeDownloadService.cs" />
     <Compile Include="Services\NodeProcessWorker.cs" />
+    <Compile Include="Services\PackageJsonService.cs" />
     <Compile Include="Services\RuntimeScanner.cs" />
     <Compile Include="Utils\JobObject.cs" />
   </ItemGroup>

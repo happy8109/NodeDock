@@ -10,6 +10,11 @@ namespace NodeDock
     public partial class AddAppForm : Form
     {
         public AppItem AppInfo { get; private set; }
+        
+        /// <summary>
+        /// 从 package.json 探测到的 Node.js 版本需求
+        /// </summary>
+        private string _detectedNodeVersion;
 
 
         public AddAppForm(AppItem app = null)
@@ -27,6 +32,9 @@ namespace NodeDock
                 txtArgs.Text = app.Arguments;
                 chkAutoStart.Checked = app.AutoStart;
                 cmbVersion.SelectedItem = cmbVersion.Items.Cast<NodeRuntimeInfo>().FirstOrDefault(r => r.Name == app.NodeVersion);
+                
+                // 编辑模式下也探测版本需求
+                DetectNodeVersion(app.WorkingDirectory);
             }
             else
             {
@@ -46,6 +54,50 @@ namespace NodeDock
             if (cmbVersion.Items.Count > 0) cmbVersion.SelectedIndex = 0;
         }
 
+        /// <summary>
+        /// 探测工作目录下 package.json 中的 Node.js 版本需求
+        /// </summary>
+        private void DetectNodeVersion(string workingDirectory)
+        {
+            _detectedNodeVersion = PackageJsonService.GetRequiredNodeVersion(workingDirectory);
+            
+            if (!string.IsNullOrEmpty(_detectedNodeVersion))
+            {
+                // 更新下载按钮提示
+                btnDownloadNode.Text = "下载 ⭐";
+                toolTip.SetToolTip(btnDownloadNode, $"检测到项目需要: {_detectedNodeVersion}");
+                
+                // 尝试自动选择匹配的已安装版本
+                AutoSelectMatchingVersion();
+            }
+            else
+            {
+                btnDownloadNode.Text = "下载...";
+                toolTip.SetToolTip(btnDownloadNode, "下载新的 Node.js 版本");
+            }
+        }
+
+        /// <summary>
+        /// 自动选择符合版本需求的已安装 Node 版本
+        /// </summary>
+        private void AutoSelectMatchingVersion()
+        {
+            if (string.IsNullOrEmpty(_detectedNodeVersion)) return;
+
+            foreach (var item in cmbVersion.Items)
+            {
+                if (item is NodeRuntimeInfo runtime)
+                {
+                    // 检查运行时版本是否满足需求
+                    if (PackageJsonService.IsVersionSatisfied(runtime.Name, _detectedNodeVersion))
+                    {
+                        cmbVersion.SelectedItem = runtime;
+                        return;
+                    }
+                }
+            }
+        }
+
         private void btnBrowseDir_Click(object sender, EventArgs e)
         {
             using (var fbd = new FolderBrowserDialog())
@@ -57,6 +109,9 @@ namespace NodeDock
                     {
                         txtName.Text = Path.GetFileName(fbd.SelectedPath);
                     }
+                    
+                    // 探测版本需求
+                    DetectNodeVersion(fbd.SelectedPath);
                 }
             }
         }
@@ -73,7 +128,11 @@ namespace NodeDock
                     txtScript.Text = ofd.FileName;
                     if (string.IsNullOrEmpty(txtWorkDir.Text))
                     {
-                        txtWorkDir.Text = Path.GetDirectoryName(ofd.FileName);
+                        var dir = Path.GetDirectoryName(ofd.FileName);
+                        txtWorkDir.Text = dir;
+                        
+                        // 探测版本需求
+                        DetectNodeVersion(dir);
                     }
                 }
             }
@@ -100,7 +159,8 @@ namespace NodeDock
 
         private void btnDownloadNode_Click(object sender, EventArgs e)
         {
-            using (var form = new DownloadVersionForm())
+            // 传递探测到的版本需求给下载表单
+            using (var form = new DownloadVersionForm(_detectedNodeVersion))
             {
                 if (form.ShowDialog() == DialogResult.OK)
                 {
@@ -121,3 +181,4 @@ namespace NodeDock
         }
     }
 }
+

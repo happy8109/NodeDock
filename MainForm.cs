@@ -15,6 +15,8 @@ namespace NodeDock
         
         // 日志缓存：每个应用独立存储日志历史
         private readonly Dictionary<string, StringBuilder> _logCache = new Dictionary<string, StringBuilder>();
+        // 日志标签页映射：AppId -> TabPage
+        private readonly Dictionary<string, TabPage> _logTabs = new Dictionary<string, TabPage>();
         private const int MaxLogLines = 500;
         private bool _isLoadingList = false;
 
@@ -129,20 +131,107 @@ namespace NodeDock
                 }
             }
             
-            // 如果当前选中的是该应用，同步更新 UI
-            var selectedApp = GetSelectedApp();
-            if (selectedApp != null && selectedApp.Id == id)
+            // 获取或创建对应的日志标签页
+            var tabPage = GetOrCreateLogTab(id);
+            if (tabPage != null && tabPage.Controls.Count > 0)
             {
-                if (txtLog.Lines.Length > MaxLogLines)
+                var txtLog = tabPage.Controls[0] as RichTextBox;
+                if (txtLog != null)
                 {
-                    txtLog.Select(0, txtLog.GetFirstCharIndexFromLine(txtLog.Lines.Length - MaxLogLines));
-                    txtLog.ReadOnly = false;
-                    txtLog.SelectedText = "";
-                    txtLog.ReadOnly = true;
+                    if (txtLog.Lines.Length > MaxLogLines)
+                    {
+                        txtLog.Select(0, txtLog.GetFirstCharIndexFromLine(txtLog.Lines.Length - MaxLogLines));
+                        txtLog.ReadOnly = false;
+                        txtLog.SelectedText = "";
+                        txtLog.ReadOnly = true;
+                    }
+                    txtLog.AppendText(logLine);
+                    txtLog.SelectionStart = txtLog.Text.Length;
+                    txtLog.ScrollToCaret();
                 }
-                txtLog.AppendText(logLine);
+            }
+        }
+
+        /// <summary>
+        /// 获取或创建应用的日志标签页
+        /// </summary>
+        private TabPage GetOrCreateLogTab(string appId)
+        {
+            if (_logTabs.ContainsKey(appId))
+            {
+                return _logTabs[appId];
+            }
+
+            // 查找应用名称
+            var app = ConfigService.Instance.Settings.AppList.Find(a => a.Id == appId);
+            if (app == null) return null;
+
+            return CreateLogTab(appId, app.Name);
+        }
+
+        /// <summary>
+        /// 创建日志标签页
+        /// </summary>
+        private TabPage CreateLogTab(string appId, string appName)
+        {
+            var tabPage = new TabPage(appName)
+            {
+                Tag = appId
+            };
+
+            var txtLog = new RichTextBox
+            {
+                Dock = DockStyle.Fill,
+                ReadOnly = true,
+                Font = new Font("Consolas", 9F),
+                BackColor = Color.White,
+                ForeColor = Color.FromArgb(51, 65, 85),
+                BorderStyle = BorderStyle.None
+            };
+
+            // 如果缓存中有历史日志，恢复显示
+            if (_logCache.ContainsKey(appId))
+            {
+                txtLog.Text = _logCache[appId].ToString();
                 txtLog.SelectionStart = txtLog.Text.Length;
                 txtLog.ScrollToCaret();
+            }
+
+            tabPage.Controls.Add(txtLog);
+            tabLogs.TabPages.Add(tabPage);
+            _logTabs[appId] = tabPage;
+
+            // 自动切换到新标签页
+            tabLogs.SelectedTab = tabPage;
+
+            return tabPage;
+        }
+
+        /// <summary>
+        /// 更新日志标签页标题（用于显示状态）
+        /// </summary>
+        private void UpdateLogTabTitle(string appId, Models.AppStatus status)
+        {
+            if (!_logTabs.ContainsKey(appId)) return;
+
+            var app = ConfigService.Instance.Settings.AppList.Find(a => a.Id == appId);
+            if (app == null) return;
+
+            var tabPage = _logTabs[appId];
+            switch (status)
+            {
+                case Models.AppStatus.Running:
+                    tabPage.Text = app.Name;
+                    break;
+                case Models.AppStatus.Stopped:
+                    tabPage.Text = $"{app.Name} (已停止)";
+                    break;
+                case Models.AppStatus.Error:
+                    tabPage.Text = $"{app.Name} (异常)";
+                    break;
+                default:
+                    tabPage.Text = app.Name;
+                    break;
             }
         }
 
@@ -184,6 +273,9 @@ namespace NodeDock
                     row.Cells["colStatus"].Value = status.ToString();
                     UpdateRowStyle(row, status);
                     dgvApps.InvalidateRow(row.Index); // 触发重绘操作按钮
+                    
+                    // 同步更新日志标签页标题
+                    UpdateLogTabTitle(id, status);
                     break;
                 }
             }
@@ -298,27 +390,11 @@ namespace NodeDock
         {
             if (_isLoadingList) return;
             
+            // 选中应用时自动切换到对应的日志标签页
             var app = GetSelectedApp();
-            if (app != null)
+            if (app != null && _logTabs.ContainsKey(app.Id))
             {
-                lblLogTitle.Text = $"实时日志预览 - {app.Name}";
-                
-                // 从缓存恢复该应用的日志历史
-                if (_logCache.ContainsKey(app.Id))
-                {
-                    txtLog.Text = _logCache[app.Id].ToString();
-                    txtLog.SelectionStart = txtLog.Text.Length;
-                    txtLog.ScrollToCaret();
-                }
-                else
-                {
-                    txtLog.Clear();
-                }
-            }
-            else
-            {
-                lblLogTitle.Text = "实时日志预览 (仅显示当前选中项)";
-                txtLog.Clear();
+                tabLogs.SelectedTab = _logTabs[app.Id];
             }
         }
 
@@ -338,6 +414,13 @@ namespace NodeDock
                 }
             }
         }
+
+        private void btnSetting_Click(object sender, EventArgs e)
+        {
+            // TODO: 打开系统设置窗口
+            MessageBox.Show("系统设置功能开发中...", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
 
         private void SetupTray()
         {
