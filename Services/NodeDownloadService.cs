@@ -22,12 +22,32 @@ namespace NodeDock.Services
             {
                 string json = await _httpClient.GetStringAsync(VersionListUrl);
                 var versions = JsonConvert.DeserializeObject<List<RemoteNodeVersion>>(json);
-                return versions.Where(v => v.Files.Contains("win-x64-zip")).ToList();
+                // 只显示 v16+ 的 LTS 版本
+                return versions.Where(v => 
+                    v.Files.Contains("win-x64-zip") && 
+                    v.Lts != null &&                    // 只要 LTS 版本
+                    GetMajorVersion(v.Version) >= 16    // 只要 v16+
+                ).ToList();
             }
             catch (Exception ex)
             {
                 throw new Exception("获取 Node.js 版本列表失败: " + ex.Message);
             }
+        }
+
+        /// <summary>
+        /// 从版本字符串提取主版本号，如 "v16.20.0" -> 16
+        /// </summary>
+        private int GetMajorVersion(string version)
+        {
+            if (string.IsNullOrEmpty(version)) return 0;
+            version = version.TrimStart('v');
+            var parts = version.Split('.');
+            if (parts.Length > 0 && int.TryParse(parts[0], out int major))
+            {
+                return major;
+            }
+            return 0;
         }
 
         public async Task DownloadAndExtractAsync(string version, Action<int> onProgress)
@@ -69,10 +89,12 @@ namespace NodeDock.Services
                     }
                 }
 
-                // 2. 解压
+                // 2. 解压 - 在runtimes目录下创建临时目录，避免跨卷移动问题
+                // Directory.Move 无法在不同磁盘分区之间移动，必须确保临时目录和目标目录在同一分区
                 if (Directory.Exists(targetDir)) Directory.Delete(targetDir, true);
                 
-                string extractTempPath = Path.Combine(runtimesDir, $"temp_{version}");
+                // 使用runtimes目录下的临时文件夹，确保与目标在同一分区
+                string extractTempPath = Path.Combine(runtimesDir, $"_temp_{Guid.NewGuid():N}".Substring(0, 16));
                 if (Directory.Exists(extractTempPath)) Directory.Delete(extractTempPath, true);
 
                 ZipFile.ExtractToDirectory(tempZipPath, extractTempPath);
