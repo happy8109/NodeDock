@@ -22,6 +22,7 @@ namespace NodeDock
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.pnlSidebar = new System.Windows.Forms.Panel();
             this.btnSetting = new System.Windows.Forms.Button();
             this.btnAddApp = new System.Windows.Forms.Button();
@@ -136,7 +137,7 @@ namespace NodeDock
             this.lblLogo.Name = "lblLogo";
             this.lblLogo.Size = new System.Drawing.Size(180, 46);
             this.lblLogo.TabIndex = 0;
-            this.lblLogo.Text = "🚀 NodeDock";
+            this.lblLogo.Text = "NodeDock";
             this.lblLogo.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // pnlMain
@@ -290,6 +291,7 @@ namespace NodeDock
             this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.pnlSidebar);
             this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(710, 690);
             this.MinimumSize = new System.Drawing.Size(710, 690);

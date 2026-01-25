@@ -28,6 +28,11 @@ namespace NodeDock
         public MainForm()
         {
             InitializeComponent();
+            
+            try {
+                this.Icon = new Icon("Resources\\app_icon.ico");
+            } catch { }
+            
             SetupTray();
             SetupAppContextMenu();
             
@@ -435,7 +440,7 @@ namespace NodeDock
             _notifyIcon = new NotifyIcon
             {
                 Text = "NodeDock - Node.js 应用管理",
-                Icon = SystemIcons.Application,
+                Icon = this.Icon ?? SystemIcons.Application,
                 ContextMenuStrip = _trayMenu,
                 Visible = true
             };
