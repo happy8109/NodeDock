@@ -422,8 +422,10 @@ namespace NodeDock
 
         private void btnSetting_Click(object sender, EventArgs e)
         {
-            // TODO: 打开系统设置窗口
-            MessageBox.Show("系统设置功能开发中...", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            using (var form = new SettingsForm())
+            {
+                form.ShowDialog(this);
+            }
         }
 
 

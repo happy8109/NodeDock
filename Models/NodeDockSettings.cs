@@ -26,5 +26,22 @@ namespace NodeDock.Models
         /// 默认使用的 Node 版本名称
         /// </summary>
         public string DefaultNodeVersion { get; set; }
+        
+        /// <summary>
+        /// 下载镜像源 URL
+        /// 官方源: https://nodejs.org/dist/
+        /// 淘宝镜像: https://npmmirror.com/mirrors/node/
+        /// </summary>
+        public string MirrorSource { get; set; } = "https://nodejs.org/dist/";
+    }
+    
+    /// <summary>
+    /// 预定义的镜像源
+    /// </summary>
+    public static class MirrorSources
+    {
+        public const string Official = "https://nodejs.org/dist/";
+        public const string Taobao = "https://npmmirror.com/mirrors/node/";
     }
 }
+

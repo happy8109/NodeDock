@@ -140,5 +140,31 @@ namespace NodeDock.Services
 
             System.Diagnostics.Process.Start(startInfo);
         }
+        
+        /// <summary>
+        /// 获取使用指定 Node.js 版本的应用列表
+        /// </summary>
+        /// <param name="versionName">版本名称</param>
+        /// <returns>使用该版本的应用列表</returns>
+        public List<AppItem> GetAppsUsingVersion(string versionName)
+        {
+            var settings = ConfigService.Instance.Settings;
+            
+            // 直接配置了该版本的应用
+            var directUsers = settings.AppList
+                .Where(a => a.NodeVersion == versionName)
+                .ToList();
+            
+            // 如果该版本是默认版本，还需要检查未指定版本的应用
+            if (settings.DefaultNodeVersion == versionName)
+            {
+                var defaultUsers = settings.AppList
+                    .Where(a => string.IsNullOrEmpty(a.NodeVersion))
+                    .ToList();
+                directUsers.AddRange(defaultUsers);
+            }
+            
+            return directUsers;
+        }
     }
 }

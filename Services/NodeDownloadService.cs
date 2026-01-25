@@ -13,8 +13,22 @@ namespace NodeDock.Services
     public class NodeDownloadService
     {
         private static readonly HttpClient _httpClient = new HttpClient();
-        private const string VersionListUrl = "https://nodejs.org/dist/index.json";
-        private const string DownloadUrlTemplate = "https://nodejs.org/dist/{0}/node-{0}-win-x64.zip";
+        
+        /// <summary>
+        /// 获取当前配置的镜像源基础 URL
+        /// </summary>
+        private string BaseUrl => ConfigService.Instance.Settings.MirrorSource ?? MirrorSources.Official;
+        
+        /// <summary>
+        /// 版本列表 URL (追加 index.json)
+        /// </summary>
+        private string VersionListUrl => BaseUrl.TrimEnd('/') + "/index.json";
+        
+        /// <summary>
+        /// 下载 URL 模板 ({0} 为版本号，如 v20.0.0)
+        /// </summary>
+        private string GetDownloadUrl(string version) => 
+            $"{BaseUrl.TrimEnd('/')}/{version}/node-{version}-win-x64.zip";
 
         public async Task<List<RemoteNodeVersion>> GetAvailableVersionsAsync()
         {
@@ -53,7 +67,7 @@ namespace NodeDock.Services
         public async Task DownloadAndExtractAsync(string version, Action<int> onProgress)
         {
             if (!version.StartsWith("v")) version = "v" + version;
-            string url = string.Format(DownloadUrlTemplate, version);
+            string url = GetDownloadUrl(version);
             string runtimesDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "runtimes");
             string targetDir = Path.Combine(runtimesDir, version);
             string tempZipPath = Path.Combine(runtimesDir, $"{version}.zip");
