@@ -17,6 +17,7 @@ using System.Runtime.InteropServices;
 
 // 版本信息
 // 格式: 主版本.次版本.修订号.构建号
+// v1.2.0 - 新增进程守护功能（异常退出自动重启）
 // v1.1.0 - 新增设置管理功能（运行时版本管理、镜像源切换、开机自启动）
-[assembly: AssemblyVersion("1.1.0.0")]
-[assembly: AssemblyFileVersion("1.1.0.0")]
+[assembly: AssemblyVersion("1.2.0.0")]
+[assembly: AssemblyFileVersion("1.2.0.0")]

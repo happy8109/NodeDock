@@ -41,6 +41,26 @@ namespace NodeDock.Models
         /// 是否随管理器启动而自动启动
         /// </summary>
         public bool AutoStart { get; set; }
+        
+        /// <summary>
+        /// 是否开启进程守护（异常退出时自动重启）
+        /// </summary>
+        public bool EnableAutoRestart { get; set; }
+        
+        /// <summary>
+        /// 最大连续重启次数（在 RestartWindowMinutes 时间窗口内）
+        /// </summary>
+        public int MaxRestartAttempts { get; set; } = 3;
+        
+        /// <summary>
+        /// 重启前延迟秒数
+        /// </summary>
+        public int RestartDelaySeconds { get; set; } = 5;
+        
+        /// <summary>
+        /// 重启计数窗口（分钟），超过此时间后重启计数器重置
+        /// </summary>
+        public int RestartWindowMinutes { get; set; } = 10;
 
         /// <summary>
         /// 运行状态（内部运行态，不序列化到 JSON）
@@ -60,6 +80,8 @@ namespace NodeDock.Models
         Stopped,
         Starting,
         Running,
+        Restarting,  // 新增：自动重启中
         Error
     }
 }
+

@@ -15,13 +15,15 @@ namespace NodeDock
 
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.pnlSidebar = new System.Windows.Forms.Panel();
             this.btnSetting = new System.Windows.Forms.Button();
@@ -34,11 +36,13 @@ namespace NodeDock
             this.colIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colGuard = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colPath = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colAction = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlLog = new System.Windows.Forms.Panel();
-            this.tabLogs = new System.Windows.Forms.TabControl();
+            this.pnlLogTabs = new System.Windows.Forms.FlowLayoutPanel();
+            this.txtLogContent = new System.Windows.Forms.RichTextBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.pnlSidebar.SuspendLayout();
             this.pnlMain.SuspendLayout();
@@ -157,6 +161,7 @@ namespace NodeDock
             // 
             this.dgvApps.AllowUserToAddRows = false;
             this.dgvApps.AllowUserToDeleteRows = false;
+            this.dgvApps.AllowUserToResizeColumns = false;
             this.dgvApps.AllowUserToResizeRows = false;
             this.dgvApps.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
@@ -164,22 +169,31 @@ namespace NodeDock
             this.dgvApps.BackgroundColor = System.Drawing.Color.White;
             this.dgvApps.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dgvApps.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.SingleHorizontal;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgvApps.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgvApps.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvApps.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colIndex,
             this.colName,
             this.colStatus,
+            this.colGuard,
             this.colVersion,
             this.colPath,
             this.colAction});
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(234)))), ((int)(((byte)(254)))));
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvApps.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(234)))), ((int)(((byte)(254)))));
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvApps.DefaultCellStyle = dataGridViewCellStyle9;
             this.dgvApps.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(229)))), ((int)(((byte)(231)))), ((int)(((byte)(235)))));
             this.dgvApps.Location = new System.Drawing.Point(10, 10);
             this.dgvApps.MultiSelect = false;
@@ -196,38 +210,48 @@ namespace NodeDock
             // 
             // colIndex
             // 
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.colIndex.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colIndex.DefaultCellStyle = dataGridViewCellStyle2;
             this.colIndex.HeaderText = "#";
             this.colIndex.Name = "colIndex";
             this.colIndex.ReadOnly = true;
             this.colIndex.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.colIndex.Width = 40;
+            this.colIndex.Width = 25;
             // 
             // colName
             // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.colName.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colName.DefaultCellStyle = dataGridViewCellStyle3;
             this.colName.HeaderText = "应用名称";
             this.colName.Name = "colName";
             this.colName.ReadOnly = true;
             this.colName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.colName.Width = 140;
+            this.colName.Width = 125;
             // 
             // colStatus
             // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.colStatus.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colStatus.DefaultCellStyle = dataGridViewCellStyle4;
             this.colStatus.HeaderText = "状态";
             this.colStatus.Name = "colStatus";
             this.colStatus.ReadOnly = true;
             this.colStatus.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.colStatus.Width = 80;
             // 
+            // colGuard
+            // 
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colGuard.DefaultCellStyle = dataGridViewCellStyle5;
+            this.colGuard.HeaderText = "守护";
+            this.colGuard.Name = "colGuard";
+            this.colGuard.ReadOnly = true;
+            this.colGuard.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colGuard.Width = 50;
+            // 
             // colVersion
             // 
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.colVersion.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colVersion.DefaultCellStyle = dataGridViewCellStyle6;
             this.colVersion.HeaderText = "Node 版本";
             this.colVersion.Name = "colVersion";
             this.colVersion.ReadOnly = true;
@@ -235,18 +259,18 @@ namespace NodeDock
             // 
             // colPath
             // 
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.colPath.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.colPath.DefaultCellStyle = dataGridViewCellStyle7;
             this.colPath.HeaderText = "工作目录";
             this.colPath.Name = "colPath";
             this.colPath.ReadOnly = true;
             this.colPath.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.colPath.Width = 200;
+            this.colPath.Width = 195;
             // 
             // colAction
             // 
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.colAction.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colAction.DefaultCellStyle = dataGridViewCellStyle8;
             this.colAction.HeaderText = "操作";
             this.colAction.Name = "colAction";
             this.colAction.ReadOnly = true;
@@ -257,21 +281,38 @@ namespace NodeDock
             this.pnlLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlLog.Controls.Add(this.tabLogs);
+            this.pnlLog.BackColor = System.Drawing.Color.White;
+            this.pnlLog.Controls.Add(this.txtLogContent);
+            this.pnlLog.Controls.Add(this.pnlLogTabs);
             this.pnlLog.Location = new System.Drawing.Point(10, 385);
             this.pnlLog.Name = "pnlLog";
             this.pnlLog.Size = new System.Drawing.Size(675, 165);
             this.pnlLog.TabIndex = 2;
             // 
-            // tabLogs
+            // pnlLogTabs
             // 
-            this.tabLogs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabLogs.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.tabLogs.Location = new System.Drawing.Point(0, 0);
-            this.tabLogs.Name = "tabLogs";
-            this.tabLogs.SelectedIndex = 0;
-            this.tabLogs.Size = new System.Drawing.Size(675, 165);
-            this.tabLogs.TabIndex = 0;
+            this.pnlLogTabs.AutoSize = true;
+            this.pnlLogTabs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(250)))), ((int)(((byte)(251)))));
+            this.pnlLogTabs.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlLogTabs.Location = new System.Drawing.Point(0, 0);
+            this.pnlLogTabs.Name = "pnlLogTabs";
+            this.pnlLogTabs.Padding = new System.Windows.Forms.Padding(5, 3, 5, 0);
+            this.pnlLogTabs.Size = new System.Drawing.Size(675, 25);
+            this.pnlLogTabs.TabIndex = 0;
+            // 
+            // txtLogContent
+            // 
+            this.txtLogContent.BackColor = System.Drawing.Color.White;
+            this.txtLogContent.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtLogContent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtLogContent.Font = new System.Drawing.Font("Consolas", 9F);
+            this.txtLogContent.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
+            this.txtLogContent.Location = new System.Drawing.Point(0, 28);
+            this.txtLogContent.Name = "txtLogContent";
+            this.txtLogContent.ReadOnly = true;
+            this.txtLogContent.Size = new System.Drawing.Size(675, 137);
+            this.txtLogContent.TabIndex = 1;
+            this.txtLogContent.Text = "";
             // 
             // statusStrip1
             // 
@@ -314,15 +355,17 @@ namespace NodeDock
         private System.Windows.Forms.Button btnAddApp;
         private System.Windows.Forms.Panel pnlMain;
         private System.Windows.Forms.DataGridView dgvApps;
+        private System.Windows.Forms.Panel pnlLog;
+        private System.Windows.Forms.FlowLayoutPanel pnlLogTabs;
+        private System.Windows.Forms.RichTextBox txtLogContent;
+        private System.Windows.Forms.Button btnSetting;
+        private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.DataGridViewTextBoxColumn colIndex;
         private System.Windows.Forms.DataGridViewTextBoxColumn colName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colGuard;
         private System.Windows.Forms.DataGridViewTextBoxColumn colVersion;
         private System.Windows.Forms.DataGridViewTextBoxColumn colPath;
         private System.Windows.Forms.DataGridViewTextBoxColumn colAction;
-        private System.Windows.Forms.Panel pnlLog;
-        private System.Windows.Forms.TabControl tabLogs;
-        private System.Windows.Forms.Button btnSetting;
-        private System.Windows.Forms.StatusStrip statusStrip1;
     }
 }

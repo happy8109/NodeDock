@@ -29,6 +29,7 @@ namespace NodeDock
             this.label5 = new System.Windows.Forms.Label();
             this.txtArgs = new System.Windows.Forms.TextBox();
             this.chkAutoStart = new System.Windows.Forms.CheckBox();
+            this.chkAutoRestart = new System.Windows.Forms.CheckBox();
             this.btnDownloadNode = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
@@ -164,6 +165,16 @@ namespace NodeDock
             this.chkAutoStart.Text = "管理器启动时自启动";
             this.chkAutoStart.UseVisualStyleBackColor = true;
             // 
+            // chkAutoRestart
+            // 
+            this.chkAutoRestart.AutoSize = true;
+            this.chkAutoRestart.Location = new System.Drawing.Point(260, 220);
+            this.chkAutoRestart.Name = "chkAutoRestart";
+            this.chkAutoRestart.Size = new System.Drawing.Size(132, 16);
+            this.chkAutoRestart.TabIndex = 15;
+            this.chkAutoRestart.Text = "异常退出时自动重启";
+            this.chkAutoRestart.UseVisualStyleBackColor = true;
+            // 
             // btnDownloadNode
             // 
             this.btnDownloadNode.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -209,6 +220,7 @@ namespace NodeDock
             this.ClientSize = new System.Drawing.Size(434, 311);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
+            this.Controls.Add(this.chkAutoRestart);
             this.Controls.Add(this.chkAutoStart);
             this.Controls.Add(this.txtArgs);
             this.Controls.Add(this.label5);
@@ -248,6 +260,7 @@ namespace NodeDock
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txtArgs;
         private System.Windows.Forms.CheckBox chkAutoStart;
+        private System.Windows.Forms.CheckBox chkAutoRestart;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnDownloadNode;

@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using NodeDock.Models;
 using NodeDock.Utils;
 
@@ -13,6 +16,10 @@ namespace NodeDock.Services
         private readonly AppItem _app;
         private readonly string _nodeExePath;
         private JobObject _jobObject;
+        
+        // 进程守护相关
+        private bool _isManualStop = false;  // 是否为用户主动停止
+        private List<DateTime> _restartHistory = new List<DateTime>();  // 重启历史记录
         
         // 事件定义
         public event Action<string, string> OutputReceived; // (appId, message)
@@ -27,6 +34,9 @@ namespace NodeDock.Services
         public void Start()
         {
             if (_process != null && !_process.HasExited) return;
+            
+            // 重置手动停止标识
+            _isManualStop = false;
 
             if (string.IsNullOrEmpty(_nodeExePath) || !File.Exists(_nodeExePath))
             {
@@ -108,12 +118,7 @@ namespace NodeDock.Services
 
                 // 绑定退出事件
                 _process.EnableRaisingEvents = true;
-                _process.Exited += (s, e) => 
-                {
-                    _app.StartTime = null;
-                    if (_app.Status != AppStatus.Error) OnStatusChanged(AppStatus.Stopped);
-                    OnOutputReceived("--- 程序已退出 ---");
-                };
+                _process.Exited += OnProcessExited;
 
                 if (_process.Start())
                 {
@@ -143,9 +148,94 @@ namespace NodeDock.Services
                 OnOutputReceived($"启动失败：{ex.Message}");
             }
         }
+        
+        /// <summary>
+        /// 进程退出事件处理
+        /// </summary>
+        private void OnProcessExited(object sender, EventArgs e)
+        {
+            _app.StartTime = null;
+            
+            // 获取退出码
+            int exitCode = 0;
+            try
+            {
+                exitCode = _process?.ExitCode ?? 0;
+            }
+            catch { }
+            
+            // 判断是否需要自动重启
+            if (_isManualStop)
+            {
+                // 用户主动停止，不重启
+                OnStatusChanged(AppStatus.Stopped);
+                OnOutputReceived("--- 程序已停止 ---");
+            }
+            else if (exitCode == 0)
+            {
+                // 正常退出，不重启
+                OnStatusChanged(AppStatus.Stopped);
+                OnOutputReceived("--- 程序正常退出 ---");
+            }
+            else if (_app.EnableAutoRestart)
+            {
+                // 异常退出且开启了自动重启
+                OnOutputReceived($"--- 程序异常退出 (ExitCode: {exitCode}) ---");
+                TryAutoRestart();
+            }
+            else
+            {
+                // 异常退出但未开启自动重启
+                if (_app.Status != AppStatus.Error) OnStatusChanged(AppStatus.Stopped);
+                OnOutputReceived($"--- 程序异常退出 (ExitCode: {exitCode}) ---");
+            }
+        }
+        
+        /// <summary>
+        /// 尝试自动重启
+        /// </summary>
+        private void TryAutoRestart()
+        {
+            // 清理过期的重启记录（超过时间窗口）
+            var windowStart = DateTime.Now.AddMinutes(-_app.RestartWindowMinutes);
+            _restartHistory.RemoveAll(t => t < windowStart);
+            
+            // 检查重启次数是否已达上限
+            if (_restartHistory.Count >= _app.MaxRestartAttempts)
+            {
+                OnStatusChanged(AppStatus.Error);
+                OnOutputReceived($"*** 已达最大重启次数 ({_app.MaxRestartAttempts} 次/{_app.RestartWindowMinutes} 分钟)，停止自动重启 ***");
+                return;
+            }
+            
+            // 记录本次重启
+            _restartHistory.Add(DateTime.Now);
+            int attempt = _restartHistory.Count;
+            
+            OnStatusChanged(AppStatus.Restarting);
+            OnOutputReceived($"*** 将在 {_app.RestartDelaySeconds} 秒后自动重启 (第 {attempt}/{_app.MaxRestartAttempts} 次) ***");
+            
+            // 延迟后重启
+            Task.Delay(_app.RestartDelaySeconds * 1000).ContinueWith(_ =>
+            {
+                // 再次检查是否被手动停止
+                if (_isManualStop)
+                {
+                    OnStatusChanged(AppStatus.Stopped);
+                    OnOutputReceived("*** 自动重启已取消（用户手动停止）***");
+                    return;
+                }
+                
+                OnOutputReceived("*** 正在自动重启... ***");
+                Start();
+            });
+        }
 
         public void Stop()
         {
+            // 标记为手动停止
+            _isManualStop = true;
+            
             try
             {
                 if (_jobObject != null)
@@ -174,10 +264,10 @@ namespace NodeDock.Services
 
         public void Dispose()
         {
+            _isManualStop = true;  // 防止 Dispose 时触发重启
             Stop();
             _process?.Dispose();
             _jobObject?.Dispose();
         }
     }
 }
-

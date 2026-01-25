@@ -15,8 +15,10 @@ namespace NodeDock
         
         // 日志缓存：每个应用独立存储日志历史
         private readonly Dictionary<string, StringBuilder> _logCache = new Dictionary<string, StringBuilder>();
-        // 日志标签页映射：AppId -> TabPage
-        private readonly Dictionary<string, TabPage> _logTabs = new Dictionary<string, TabPage>();
+        // 日志标签按钮映射：AppId -> Button
+        private readonly Dictionary<string, Button> _logTabButtons = new Dictionary<string, Button>();
+        // 当前选中的应用ID
+        private string _currentLogAppId = null;
         private const int MaxLogLines = 500;
         private bool _isLoadingList = false;
 
@@ -104,6 +106,7 @@ namespace NodeDock
                 ConfigService.Instance.Save();
                 ManagerService.Instance.RefreshWorkers();
                 _logCache.Remove(app.Id);
+                RemoveLogTab(app.Id);
                 LoadAppList();
             }
         }
@@ -136,107 +139,200 @@ namespace NodeDock
                 }
             }
             
-            // 获取或创建对应的日志标签页
-            var tabPage = GetOrCreateLogTab(id);
-            if (tabPage != null && tabPage.Controls.Count > 0)
+            // 确保标签按钮存在
+            EnsureLogTabButton(id);
+            
+            // 如果当前显示的是该应用的日志，直接追加
+            if (_currentLogAppId == id)
             {
-                var txtLog = tabPage.Controls[0] as RichTextBox;
-                if (txtLog != null)
+                if (txtLogContent.Lines.Length > MaxLogLines)
                 {
-                    if (txtLog.Lines.Length > MaxLogLines)
-                    {
-                        txtLog.Select(0, txtLog.GetFirstCharIndexFromLine(txtLog.Lines.Length - MaxLogLines));
-                        txtLog.ReadOnly = false;
-                        txtLog.SelectedText = "";
-                        txtLog.ReadOnly = true;
-                    }
-                    txtLog.AppendText(logLine);
-                    txtLog.SelectionStart = txtLog.Text.Length;
-                    txtLog.ScrollToCaret();
+                    txtLogContent.Select(0, txtLogContent.GetFirstCharIndexFromLine(txtLogContent.Lines.Length - MaxLogLines));
+                    txtLogContent.ReadOnly = false;
+                    txtLogContent.SelectedText = "";
+                    txtLogContent.ReadOnly = true;
+                }
+                txtLogContent.AppendText(logLine);
+                txtLogContent.SelectionStart = txtLogContent.Text.Length;
+                txtLogContent.ScrollToCaret();
+            }
+        }
+
+        /// <summary>
+        /// 确保应用的日志标签按钮存在
+        /// </summary>
+        private void EnsureLogTabButton(string appId)
+        {
+            if (_logTabButtons.ContainsKey(appId)) return;
+
+            var app = ConfigService.Instance.Settings.AppList.Find(a => a.Id == appId);
+            if (app == null) return;
+
+            CreateLogTabButton(appId, app);
+        }
+
+        /// <summary>
+        /// 创建日志标签按钮
+        /// </summary>
+        private void CreateLogTabButton(string appId, Models.AppItem app)
+        {
+            var btn = new Button
+            {
+                Text = $"     {app.Name}",  // 前面留空给彩色圆点
+                FlatStyle = FlatStyle.Flat,
+                AutoSize = true,
+                Padding = new Padding(6, 2, 6, 2),
+                Margin = new Padding(2, 0, 2, 0),
+                Font = new Font("Segoe UI", 9F),
+                Cursor = Cursors.Hand,
+                BackColor = Color.Transparent,
+                ForeColor = Color.FromArgb(107, 114, 128)
+            };
+            btn.FlatAppearance.BorderSize = 0;
+            btn.FlatAppearance.MouseOverBackColor = Color.FromArgb(243, 244, 246);
+            btn.Click += LogTabButton_Click;
+
+            _logTabButtons[appId] = btn;
+            pnlLogTabs.Controls.Add(btn);
+
+            // 设置状态颜色
+            UpdateLogTabButtonStyle(appId, app.Status);
+
+            // 如果是第一个标签，自动选中
+            if (_currentLogAppId == null)
+            {
+                SwitchToLogTab(appId);
+            }
+        }
+
+        /// <summary>
+        /// 移除日志标签按钮
+        /// </summary>
+        private void RemoveLogTab(string appId)
+        {
+            if (_logTabButtons.ContainsKey(appId))
+            {
+                pnlLogTabs.Controls.Remove(_logTabButtons[appId]);
+                _logTabButtons[appId].Dispose();
+                _logTabButtons.Remove(appId);
+            }
+
+            // 如果移除的是当前显示的，切换到其他标签
+            if (_currentLogAppId == appId)
+            {
+                _currentLogAppId = null;
+                txtLogContent.Clear();
+                
+                // 切换到第一个可用的标签
+                foreach (var kvp in _logTabButtons)
+                {
+                    SwitchToLogTab(kvp.Key);
+                    break;
                 }
             }
         }
 
         /// <summary>
-        /// 获取或创建应用的日志标签页
+        /// 点击日志标签按钮
         /// </summary>
-        private TabPage GetOrCreateLogTab(string appId)
+        private void LogTabButton_Click(object sender, EventArgs e)
         {
-            if (_logTabs.ContainsKey(appId))
+            var btn = sender as Button;
+            // 从 _logTabButtons 字典中查找对应的 appId
+            foreach (var kvp in _logTabButtons)
             {
-                return _logTabs[appId];
+                if (kvp.Value == btn)
+                {
+                    SwitchToLogTab(kvp.Key);
+                    break;
+                }
             }
-
-            // 查找应用名称
-            var app = ConfigService.Instance.Settings.AppList.Find(a => a.Id == appId);
-            if (app == null) return null;
-
-            return CreateLogTab(appId, app.Name);
         }
 
         /// <summary>
-        /// 创建日志标签页
+        /// 切换到指定应用的日志
         /// </summary>
-        private TabPage CreateLogTab(string appId, string appName)
+        private void SwitchToLogTab(string appId)
         {
-            var tabPage = new TabPage(appName)
-            {
-                Tag = appId
-            };
+            _currentLogAppId = appId;
 
-            var txtLog = new RichTextBox
+            // 更新按钮样式
+            foreach (var kvp in _logTabButtons)
             {
-                Dock = DockStyle.Fill,
-                ReadOnly = true,
-                Font = new Font("Consolas", 9F),
-                BackColor = Color.White,
-                ForeColor = Color.FromArgb(51, 65, 85),
-                BorderStyle = BorderStyle.None
-            };
+                bool isSelected = (kvp.Key == appId);
+                kvp.Value.BackColor = isSelected ? Color.White : Color.Transparent;
+                kvp.Value.Font = new Font("Segoe UI", 9F, isSelected ? FontStyle.Bold : FontStyle.Regular);
+            }
 
-            // 如果缓存中有历史日志，恢复显示
+            // 显示日志内容
             if (_logCache.ContainsKey(appId))
             {
-                txtLog.Text = _logCache[appId].ToString();
-                txtLog.SelectionStart = txtLog.Text.Length;
-                txtLog.ScrollToCaret();
+                txtLogContent.Text = _logCache[appId].ToString();
+                txtLogContent.SelectionStart = txtLogContent.Text.Length;
+                txtLogContent.ScrollToCaret();
             }
-
-            tabPage.Controls.Add(txtLog);
-            tabLogs.TabPages.Add(tabPage);
-            _logTabs[appId] = tabPage;
-
-            // 自动切换到新标签页
-            tabLogs.SelectedTab = tabPage;
-
-            return tabPage;
+            else
+            {
+                txtLogContent.Clear();
+            }
         }
 
         /// <summary>
-        /// 更新日志标签页标题（用于显示状态）
+        /// 更新日志标签按钮样式（状态颜色）
         /// </summary>
-        private void UpdateLogTabTitle(string appId, Models.AppStatus status)
+        private void UpdateLogTabButtonStyle(string appId, Models.AppStatus status)
         {
-            if (!_logTabs.ContainsKey(appId)) return;
+            if (!_logTabButtons.ContainsKey(appId)) return;
 
             var app = ConfigService.Instance.Settings.AppList.Find(a => a.Id == appId);
             if (app == null) return;
 
-            var tabPage = _logTabs[appId];
+            var btn = _logTabButtons[appId];
+            Color statusColor;
+            
             switch (status)
             {
                 case Models.AppStatus.Running:
-                    tabPage.Text = app.Name;
+                    statusColor = Color.FromArgb(34, 197, 94);  // 绿色
                     break;
                 case Models.AppStatus.Stopped:
-                    tabPage.Text = $"{app.Name} (已停止)";
+                    statusColor = Color.FromArgb(156, 163, 175);  // 灰色
                     break;
                 case Models.AppStatus.Error:
-                    tabPage.Text = $"{app.Name} (异常)";
+                    statusColor = Color.FromArgb(245, 158, 11);  // 橙色
+                    break;
+                case Models.AppStatus.Restarting:
+                    statusColor = Color.FromArgb(59, 130, 246);  // 蓝色
                     break;
                 default:
-                    tabPage.Text = app.Name;
+                    statusColor = Color.FromArgb(156, 163, 175);
                     break;
+            }
+
+            // 更新按钮文字（前面留空给彩色圆点）
+            btn.Text = $"     {app.Name}";
+            btn.ForeColor = _currentLogAppId == appId ? Color.FromArgb(17, 24, 39) : Color.FromArgb(107, 114, 128);
+            
+            // 通过 Paint 事件绘制彩色圆点
+            btn.Paint -= LogTabButton_Paint;
+            btn.Paint += LogTabButton_Paint;
+            btn.Tag = statusColor;  // Tag 存储颜色
+            btn.Invalidate();
+        }
+
+        /// <summary>
+        /// 绘制日志标签按钮（带彩色圆点）
+        /// </summary>
+        private void LogTabButton_Paint(object sender, PaintEventArgs e)
+        {
+            var btn = sender as Button;
+            if (btn?.Tag is Color statusColor)
+            {
+                // 绘制彩色圆点
+                using (var brush = new SolidBrush(statusColor))
+                {
+                    e.Graphics.FillEllipse(brush, 8, (btn.Height - 8) / 2, 8, 8);
+                }
             }
         }
 
@@ -247,7 +343,8 @@ namespace NodeDock
             int index = 1;
             foreach (var app in ConfigService.Instance.Settings.AppList)
             {
-                int rowIndex = dgvApps.Rows.Add(index++, app.Name, app.Status.ToString(), app.NodeVersion, app.WorkingDirectory, "");
+                string guardDisplay = app.EnableAutoRestart ? "✓" : "";
+                int rowIndex = dgvApps.Rows.Add(index++, app.Name, app.Status.ToString(), guardDisplay, app.NodeVersion, app.WorkingDirectory, "");
                 dgvApps.Rows[rowIndex].Tag = app;
                 UpdateRowStyle(dgvApps.Rows[rowIndex], app.Status);
             }
@@ -279,8 +376,8 @@ namespace NodeDock
                     UpdateRowStyle(row, status);
                     dgvApps.InvalidateRow(row.Index); // 触发重绘操作按钮
                     
-                    // 同步更新日志标签页标题
-                    UpdateLogTabTitle(id, status);
+                    // 同步更新日志标签按钮样式
+                    UpdateLogTabButtonStyle(id, status);
                     break;
                 }
             }
@@ -292,16 +389,19 @@ namespace NodeDock
             switch (status)
             {
                 case Models.AppStatus.Running:
-                    statusColor = Color.FromArgb(22, 163, 74);
+                    statusColor = Color.FromArgb(22, 163, 74);  // 绿色
                     break;
                 case Models.AppStatus.Error:
-                    statusColor = Color.FromArgb(220, 38, 38);
+                    statusColor = Color.FromArgb(220, 38, 38);  // 红色
                     break;
                 case Models.AppStatus.Starting:
-                    statusColor = Color.FromArgb(37, 99, 235);
+                    statusColor = Color.FromArgb(37, 99, 235);  // 蓝色
+                    break;
+                case Models.AppStatus.Restarting:
+                    statusColor = Color.FromArgb(245, 158, 11); // 橙色
                     break;
                 default:
-                    statusColor = Color.FromArgb(75, 85, 99);
+                    statusColor = Color.FromArgb(75, 85, 99);   // 灰色
                     break;
             }
             row.Cells["colStatus"].Style.ForeColor = statusColor;
@@ -395,11 +495,11 @@ namespace NodeDock
         {
             if (_isLoadingList) return;
             
-            // 选中应用时自动切换到对应的日志标签页
+            // 选中应用时自动切换到对应的日志
             var app = GetSelectedApp();
-            if (app != null && _logTabs.ContainsKey(app.Id))
+            if (app != null && _logTabButtons.ContainsKey(app.Id))
             {
-                tabLogs.SelectedTab = _logTabs[app.Id];
+                SwitchToLogTab(app.Id);
             }
         }
 
