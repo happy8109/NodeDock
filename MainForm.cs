@@ -473,5 +473,17 @@ namespace NodeDock
                 ManagerService.Instance.StopAll();
             }
         }
+
+        /// <summary>
+        /// 处理 Windows 消息，用于单例模式激活窗口
+        /// </summary>
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == Program.WM_SHOWME)
+            {
+                ShowMainForm();
+            }
+            base.WndProc(ref m);
+        }
     }
 }
