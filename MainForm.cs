@@ -56,6 +56,13 @@ namespace NodeDock
                     AppendLog(id, msg);
             };
 
+            ManagerService.Instance.GlobalResourceUpdated += () => {
+                if (this.InvokeRequired)
+                    this.Invoke(new Action(() => UpdateResourceUI()));
+                else
+                    UpdateResourceUI();
+            };
+
             LoadAppList();
         }
 
@@ -345,12 +352,36 @@ namespace NodeDock
             int index = 1;
             foreach (var app in ConfigService.Instance.Settings.AppList)
             {
-                string guardDisplay = app.EnableAutoRestart ? "✓" : "";
-                int rowIndex = dgvApps.Rows.Add(index++, app.Name, app.Status.ToString(), guardDisplay, app.NodeVersion, app.WorkingDirectory, "");
+                int rowIndex = dgvApps.Rows.Add(index++, app.Name, app.Status.ToString(), "", app.NodeVersion, app.WorkingDirectory, "");
                 dgvApps.Rows[rowIndex].Tag = app;
                 UpdateRowStyle(dgvApps.Rows[rowIndex], app.Status);
             }
             _isLoadingList = false;
+        }
+
+        private void UpdateResourceUI()
+        {
+            float totalCpu = 0;
+            long totalMemory = 0;
+
+            foreach (DataGridViewRow row in dgvApps.Rows)
+            {
+                var app = row.Tag as Models.AppItem;
+                if (app != null && app.Status == Models.AppStatus.Running)
+                {
+                    totalCpu += app.CpuUsage;
+                    totalMemory += app.MemoryUsage;
+
+                    string resourceText = $"{app.CpuUsage:F1}%|{app.MemoryUsage / 1024 / 1024}MB";
+                    row.Cells["colResource"].Value = resourceText;
+                }
+                else
+                {
+                    row.Cells["colResource"].Value = "";
+                }
+            }
+
+            lblResourceStatus.Text = $"总体资源占用: {totalCpu:F1}% | {totalMemory / 1024 / 1024}MB";
         }
 
         private void SelectAppById(string appId)

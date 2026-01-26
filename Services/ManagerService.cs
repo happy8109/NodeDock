@@ -12,11 +12,28 @@ namespace NodeDock.Services
 
         private readonly Dictionary<string, NodeProcessWorker> _workers = new Dictionary<string, NodeProcessWorker>();
         private readonly RuntimeScanner _scanner = new RuntimeScanner();
+        private readonly System.Timers.Timer _monitoringTimer;
 
         public event Action<string, string> GlobalOutputReceived;
         public event Action<string, AppStatus> GlobalStatusChanged;
+        public event Action GlobalResourceUpdated;
 
-        private ManagerService() { }
+        private ManagerService() 
+        {
+            _monitoringTimer = new System.Timers.Timer(2000);
+            _monitoringTimer.AutoReset = true;
+            _monitoringTimer.Elapsed += (s, e) => UpdateAllResources();
+            _monitoringTimer.Start();
+        }
+
+        private void UpdateAllResources()
+        {
+            foreach (var worker in _workers.Values)
+            {
+                worker.UpdateResourceUsage();
+            }
+            GlobalResourceUpdated?.Invoke();
+        }
 
         /// <summary>
         /// 初始化所有 Worker

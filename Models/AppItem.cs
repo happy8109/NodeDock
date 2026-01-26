@@ -73,6 +73,18 @@ namespace NodeDock.Models
         /// </summary>
         [Newtonsoft.Json.JsonIgnore]
         public DateTime? StartTime { get; set; }
+
+        /// <summary>
+        /// CPU 占用率（内部运行态）
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        public float CpuUsage { get; set; }
+
+        /// <summary>
+        /// 内存占用字节（内部运行态）
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        public long MemoryUsage { get; set; }
     }
 
     public enum AppStatus

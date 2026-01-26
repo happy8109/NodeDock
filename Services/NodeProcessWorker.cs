@@ -21,6 +21,10 @@ namespace NodeDock.Services
         private bool _isManualStop = false;  // 是否为用户主动停止
         private List<DateTime> _restartHistory = new List<DateTime>();  // 重启历史记录
         
+        // 进程监控相关
+        private long _lastCpuTime = 0;
+        private DateTime _lastSampleTime = DateTime.MinValue;
+        
         // 事件定义
         public event Action<string, string> OutputReceived; // (appId, message)
         public event Action<string, AppStatus> StatusChanged; // (appId, status)
@@ -252,6 +256,64 @@ namespace NodeDock.Services
             catch (Exception ex)
             {
                 OnOutputReceived($"停止进程失败：{ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// 更新资源占用信息（CPU和内存）
+        /// </summary>
+        public void UpdateResourceUsage()
+        {
+            if (_jobObject == null || _app.Status != AppStatus.Running)
+            {
+                _app.CpuUsage = 0;
+                _app.MemoryUsage = 0;
+                _lastCpuTime = 0;
+                return;
+            }
+
+            try
+            {
+                // 1. 获取 CPU 使用率
+                long currentCpuTime = _jobObject.GetCpuTime();
+                DateTime currentSampleTime = DateTime.Now;
+
+                if (_lastSampleTime != DateTime.MinValue && _lastCpuTime > 0)
+                {
+                    long cpuTimeDelta = currentCpuTime - _lastCpuTime;
+                    double timeDelta = (currentSampleTime - _lastSampleTime).TotalMilliseconds * 10000; // 转换为 100ns 单位
+
+                    if (timeDelta > 0)
+                    {
+                        // 计算百分比并除以 CPU 核心数
+                        float usage = (float)((cpuTimeDelta / timeDelta) * 100.0 / Environment.ProcessorCount);
+                        _app.CpuUsage = Math.Max(0, Math.Min(100, usage));
+                    }
+                }
+
+                _lastCpuTime = currentCpuTime;
+                _lastSampleTime = currentSampleTime;
+
+                // 2. 获取进程树总内存占用
+                long totalMemory = 0;
+                var pids = _jobObject.GetProcessIds();
+                foreach (int pid in pids)
+                {
+                    try
+                    {
+                        using (var p = Process.GetProcessById(pid))
+                        {
+                            totalMemory += p.WorkingSet64;
+                        }
+                    }
+                    catch { /* 进程可能已退出 */ }
+                }
+                _app.MemoryUsage = totalMemory;
+            }
+            catch
+            {
+                _app.CpuUsage = 0;
+                _app.MemoryUsage = 0;
             }
         }
 

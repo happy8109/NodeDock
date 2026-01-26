@@ -33,17 +33,18 @@ namespace NodeDock
             this.lblLogo = new System.Windows.Forms.Label();
             this.pnlMain = new System.Windows.Forms.Panel();
             this.dgvApps = new System.Windows.Forms.DataGridView();
-            this.colIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colGuard = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colPath = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colAction = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlLog = new System.Windows.Forms.Panel();
             this.pnlLogTabs = new System.Windows.Forms.FlowLayoutPanel();
             this.txtLogContent = new System.Windows.Forms.RichTextBox();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.statusMain = new System.Windows.Forms.StatusStrip();
+            this.lblResourceStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.colIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colResource = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colPath = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colAction = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlSidebar.SuspendLayout();
             this.pnlMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvApps)).BeginInit();
@@ -182,7 +183,7 @@ namespace NodeDock
             this.colIndex,
             this.colName,
             this.colStatus,
-            this.colGuard,
+            this.colResource,
             this.colVersion,
             this.colPath,
             this.colAction});
@@ -207,6 +208,62 @@ namespace NodeDock
             this.dgvApps.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvApps_CellClick);
             this.dgvApps.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvApps_CellPainting);
             this.dgvApps.SelectionChanged += new System.EventHandler(this.dgvApps_SelectionChanged);
+            // 
+            // pnlLog
+            // 
+            this.pnlLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlLog.BackColor = System.Drawing.Color.White;
+            this.pnlLog.Controls.Add(this.txtLogContent);
+            this.pnlLog.Controls.Add(this.pnlLogTabs);
+            this.pnlLog.Location = new System.Drawing.Point(10, 385);
+            this.pnlLog.Name = "pnlLog";
+            this.pnlLog.Size = new System.Drawing.Size(675, 165);
+            this.pnlLog.TabIndex = 2;
+            // 
+            // txtLogContent
+            // 
+            this.txtLogContent.BackColor = System.Drawing.Color.White;
+            this.txtLogContent.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtLogContent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtLogContent.Font = new System.Drawing.Font("Consolas", 9F);
+            this.txtLogContent.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
+            this.txtLogContent.Location = new System.Drawing.Point(0, 3);
+            this.txtLogContent.Name = "txtLogContent";
+            this.txtLogContent.ReadOnly = true;
+            this.txtLogContent.Size = new System.Drawing.Size(675, 162);
+            this.txtLogContent.TabIndex = 1;
+            this.txtLogContent.Text = "";
+            // 
+            // pnlLogTabs
+            // 
+            this.pnlLogTabs.AutoSize = true;
+            this.pnlLogTabs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(250)))), ((int)(((byte)(251)))));
+            this.pnlLogTabs.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlLogTabs.Location = new System.Drawing.Point(0, 0);
+            this.pnlLogTabs.Name = "pnlLogTabs";
+            this.pnlLogTabs.Padding = new System.Windows.Forms.Padding(5, 3, 5, 0);
+            this.pnlLogTabs.Size = new System.Drawing.Size(675, 25);
+            this.pnlLogTabs.TabIndex = 0;
+            // 
+            // statusMain
+            // 
+            this.statusMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.lblResourceStatus});
+            this.statusMain.Location = new System.Drawing.Point(0, 629);
+            this.statusMain.Name = "statusMain";
+            this.statusMain.Padding = new System.Windows.Forms.Padding(1, 0, 14, 0);
+            this.statusMain.Size = new System.Drawing.Size(694, 22);
+            this.statusMain.TabIndex = 2;
+            this.statusMain.Text = "statusMain";
+            // 
+            // lblResourceStatus
+            // 
+            this.lblResourceStatus.BackColor = System.Drawing.Color.Transparent;
+            this.lblResourceStatus.Name = "lblResourceStatus";
+            this.lblResourceStatus.Size = new System.Drawing.Size(131, 17);
+            this.lblResourceStatus.Text = "总体资源占用: 0% | 0MB";
             // 
             // colIndex
             // 
@@ -238,15 +295,15 @@ namespace NodeDock
             this.colStatus.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.colStatus.Width = 80;
             // 
-            // colGuard
+            // colResource
             // 
             dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.colGuard.DefaultCellStyle = dataGridViewCellStyle5;
-            this.colGuard.HeaderText = "守护";
-            this.colGuard.Name = "colGuard";
-            this.colGuard.ReadOnly = true;
-            this.colGuard.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.colGuard.Width = 50;
+            this.colResource.DefaultCellStyle = dataGridViewCellStyle5;
+            this.colResource.HeaderText = "资源占用";
+            this.colResource.Name = "colResource";
+            this.colResource.ReadOnly = true;
+            this.colResource.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colResource.Width = 80;
             // 
             // colVersion
             // 
@@ -256,6 +313,7 @@ namespace NodeDock
             this.colVersion.Name = "colVersion";
             this.colVersion.ReadOnly = true;
             this.colVersion.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            this.colVersion.Width = 80;
             // 
             // colPath
             // 
@@ -275,52 +333,7 @@ namespace NodeDock
             this.colAction.Name = "colAction";
             this.colAction.ReadOnly = true;
             this.colAction.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            // 
-            // pnlLog
-            // 
-            this.pnlLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlLog.BackColor = System.Drawing.Color.White;
-            this.pnlLog.Controls.Add(this.txtLogContent);
-            this.pnlLog.Controls.Add(this.pnlLogTabs);
-            this.pnlLog.Location = new System.Drawing.Point(10, 385);
-            this.pnlLog.Name = "pnlLog";
-            this.pnlLog.Size = new System.Drawing.Size(675, 165);
-            this.pnlLog.TabIndex = 2;
-            // 
-            // pnlLogTabs
-            // 
-            this.pnlLogTabs.AutoSize = true;
-            this.pnlLogTabs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(250)))), ((int)(((byte)(251)))));
-            this.pnlLogTabs.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlLogTabs.Location = new System.Drawing.Point(0, 0);
-            this.pnlLogTabs.Name = "pnlLogTabs";
-            this.pnlLogTabs.Padding = new System.Windows.Forms.Padding(5, 3, 5, 0);
-            this.pnlLogTabs.Size = new System.Drawing.Size(675, 25);
-            this.pnlLogTabs.TabIndex = 0;
-            // 
-            // txtLogContent
-            // 
-            this.txtLogContent.BackColor = System.Drawing.Color.White;
-            this.txtLogContent.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtLogContent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtLogContent.Font = new System.Drawing.Font("Consolas", 9F);
-            this.txtLogContent.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
-            this.txtLogContent.Location = new System.Drawing.Point(0, 28);
-            this.txtLogContent.Name = "txtLogContent";
-            this.txtLogContent.ReadOnly = true;
-            this.txtLogContent.Size = new System.Drawing.Size(675, 137);
-            this.txtLogContent.TabIndex = 1;
-            this.txtLogContent.Text = "";
-            // 
-            // statusStrip1
-            // 
-            this.statusStrip1.Location = new System.Drawing.Point(0, 629);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(694, 22);
-            this.statusStrip1.TabIndex = 2;
-            this.statusStrip1.Text = "statusStrip1";
+            this.colAction.Width = 90;
             // 
             // MainForm
             // 
@@ -328,7 +341,7 @@ namespace NodeDock
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(250)))), ((int)(((byte)(251)))));
             this.ClientSize = new System.Drawing.Size(694, 651);
-            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.statusMain);
             this.Controls.Add(this.pnlMain);
             this.Controls.Add(this.pnlSidebar);
             this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
@@ -343,6 +356,7 @@ namespace NodeDock
             this.pnlMain.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvApps)).EndInit();
             this.pnlLog.ResumeLayout(false);
+            this.pnlLog.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -359,11 +373,12 @@ namespace NodeDock
         private System.Windows.Forms.FlowLayoutPanel pnlLogTabs;
         private System.Windows.Forms.RichTextBox txtLogContent;
         private System.Windows.Forms.Button btnSetting;
-        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.StatusStrip statusMain;
+        private System.Windows.Forms.ToolStripStatusLabel lblResourceStatus;
         private System.Windows.Forms.DataGridViewTextBoxColumn colIndex;
         private System.Windows.Forms.DataGridViewTextBoxColumn colName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colGuard;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colResource;
         private System.Windows.Forms.DataGridViewTextBoxColumn colVersion;
         private System.Windows.Forms.DataGridViewTextBoxColumn colPath;
         private System.Windows.Forms.DataGridViewTextBoxColumn colAction;
