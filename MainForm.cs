@@ -262,6 +262,8 @@ namespace NodeDock
                 bool isSelected = (kvp.Key == appId);
                 kvp.Value.BackColor = isSelected ? Color.White : Color.Transparent;
                 kvp.Value.Font = new Font("Segoe UI", 9F, isSelected ? FontStyle.Bold : FontStyle.Regular);
+                // 选中的按钮禁用悬停效果
+                kvp.Value.FlatAppearance.MouseOverBackColor = isSelected ? Color.White : Color.FromArgb(243, 244, 246);
             }
 
             // 显示日志内容
