@@ -69,16 +69,17 @@ namespace NodeDock
             // btnSetting
             // 
             this.btnSetting.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSetting.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(114)))), ((int)(((byte)(128)))));
+            this.btnSetting.BackColor = System.Drawing.Color.White;
             this.btnSetting.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnSetting.FlatAppearance.BorderSize = 0;
+            this.btnSetting.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(114)))), ((int)(((byte)(128)))));
             this.btnSetting.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSetting.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnSetting.ForeColor = System.Drawing.Color.White;
+            this.btnSetting.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(107)))), ((int)(((byte)(114)))), ((int)(((byte)(128)))));
             this.btnSetting.Location = new System.Drawing.Point(586, 16);
             this.btnSetting.Name = "btnSetting";
             this.btnSetting.Size = new System.Drawing.Size(90, 36);
             this.btnSetting.TabIndex = 4;
+            this.btnSetting.TabStop = false;
             this.btnSetting.Text = "⚙ 设置";
             this.btnSetting.UseVisualStyleBackColor = false;
             this.btnSetting.Click += new System.EventHandler(this.btnSetting_Click);
@@ -88,14 +89,15 @@ namespace NodeDock
             this.btnAddApp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAddApp.BackColor = System.Drawing.Color.White;
             this.btnAddApp.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnAddApp.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(213)))), ((int)(((byte)(219)))));
+            this.btnAddApp.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(130)))), ((int)(((byte)(246)))));
             this.btnAddApp.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAddApp.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnAddApp.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(65)))), ((int)(((byte)(81)))));
+            this.btnAddApp.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(130)))), ((int)(((byte)(246)))));
             this.btnAddApp.Location = new System.Drawing.Point(490, 16);
             this.btnAddApp.Name = "btnAddApp";
             this.btnAddApp.Size = new System.Drawing.Size(90, 36);
             this.btnAddApp.TabIndex = 3;
+            this.btnAddApp.TabStop = false;
             this.btnAddApp.Text = "➕ 添加";
             this.btnAddApp.UseVisualStyleBackColor = false;
             this.btnAddApp.Click += new System.EventHandler(this.btnAddApp_Click);
@@ -105,14 +107,15 @@ namespace NodeDock
             this.btnStopAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnStopAll.BackColor = System.Drawing.Color.White;
             this.btnStopAll.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnStopAll.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(213)))), ((int)(((byte)(219)))));
+            this.btnStopAll.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(239)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
             this.btnStopAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnStopAll.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.btnStopAll.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(65)))), ((int)(((byte)(81)))));
+            this.btnStopAll.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(239)))), ((int)(((byte)(68)))), ((int)(((byte)(68)))));
             this.btnStopAll.Location = new System.Drawing.Point(394, 16);
             this.btnStopAll.Name = "btnStopAll";
             this.btnStopAll.Size = new System.Drawing.Size(90, 36);
             this.btnStopAll.TabIndex = 2;
+            this.btnStopAll.TabStop = false;
             this.btnStopAll.Text = "⏹ 全停";
             this.btnStopAll.UseVisualStyleBackColor = false;
             this.btnStopAll.Click += new System.EventHandler(this.btnStopAll_Click);
@@ -120,16 +123,17 @@ namespace NodeDock
             // btnStartAll
             // 
             this.btnStartAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnStartAll.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(197)))), ((int)(((byte)(94)))));
+            this.btnStartAll.BackColor = System.Drawing.Color.White;
             this.btnStartAll.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnStartAll.FlatAppearance.BorderSize = 0;
+            this.btnStartAll.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(197)))), ((int)(((byte)(94)))));
             this.btnStartAll.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnStartAll.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.btnStartAll.ForeColor = System.Drawing.Color.White;
+            this.btnStartAll.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.btnStartAll.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(197)))), ((int)(((byte)(94)))));
             this.btnStartAll.Location = new System.Drawing.Point(298, 16);
             this.btnStartAll.Name = "btnStartAll";
             this.btnStartAll.Size = new System.Drawing.Size(90, 36);
             this.btnStartAll.TabIndex = 1;
+            this.btnStartAll.TabStop = false;
             this.btnStartAll.Text = "▶ 全启";
             this.btnStartAll.UseVisualStyleBackColor = false;
             this.btnStartAll.Click += new System.EventHandler(this.btnStartAll_Click);

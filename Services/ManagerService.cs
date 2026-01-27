@@ -91,7 +91,11 @@ namespace NodeDock.Services
         {
             foreach (var worker in _workers.Values)
             {
-                worker.Start();
+                // 仅启动处于停止或错误状态的应用，防止重复启动
+                if (worker.Status == AppStatus.Stopped || worker.Status == AppStatus.Error)
+                {
+                    worker.Start();
+                }
             }
         }
 

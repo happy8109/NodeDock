@@ -35,6 +35,8 @@ namespace NodeDock.Services
             _nodeExePath = nodeExePath;
         }
 
+        public AppStatus Status => _app.Status;
+
         public void Start()
         {
             if (_process != null && !_process.HasExited) return;

@@ -64,6 +64,12 @@ namespace NodeDock
             };
 
             LoadAppList();
+
+            // 取消按钮点击后的焦点边框效果
+            btnStartAll.Enter += (s, e) => pnlSidebar.Focus();
+            btnStopAll.Enter += (s, e) => pnlSidebar.Focus();
+            btnAddApp.Enter += (s, e) => pnlSidebar.Focus();
+            btnSetting.Enter += (s, e) => pnlSidebar.Focus();
         }
 
         private void SetupAppContextMenu()
