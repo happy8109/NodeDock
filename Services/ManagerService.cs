@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NodeDock.Models;
+using NodeDock.Utils;
 
 namespace NodeDock.Services
 {
@@ -69,12 +70,22 @@ namespace NodeDock.Services
             worker.StatusChanged += (id, status) => GlobalStatusChanged?.Invoke(id, status);
 
             _workers[app.Id] = worker;
+
+            // 初始探测端口
+            app.DetectedPorts = Utils.PortDetector.DetectPorts(app.WorkingDirectory);
         }
 
         public void StartApp(string appId)
         {
             if (_workers.TryGetValue(appId, out var worker))
             {
+                var conflicts = CheckPortConflicts(worker.App, new List<AppItem>());
+                if (conflicts.Any())
+                {
+                    string msg = $"[端口冲突预警] 端口 {string.Join(", ", conflicts)} 已被占用，启动可能失败。";
+                    GlobalOutputReceived?.Invoke(appId, msg);
+                    GlobalStatusChanged?.Invoke(appId, worker.Status); // 触发 UI 更新以显示冲突
+                }
                 worker.Start();
             }
         }
@@ -89,14 +100,77 @@ namespace NodeDock.Services
 
         public void StartAll()
         {
-            foreach (var worker in _workers.Values)
+            var workersToStart = _workers.Values
+                .Where(w => w.Status == AppStatus.Stopped || w.Status == AppStatus.Error)
+                .ToList();
+
+            var startingApps = new List<AppItem>();
+
+            foreach (var worker in workersToStart)
             {
-                // 仅启动处于停止或错误状态的应用，防止重复启动
-                if (worker.Status == AppStatus.Stopped || worker.Status == AppStatus.Error)
+                var conflicts = CheckPortConflicts(worker.App, startingApps);
+                if (conflicts.Any())
                 {
-                    worker.Start();
+                    string msg = $"[端口冲突预警] 端口 {string.Join(", ", conflicts)} 存在冲突（系统占用或并发应用冲突）。";
+                    GlobalOutputReceived?.Invoke(worker.App.Id, msg);
+                }
+                
+                worker.Start();
+                startingApps.Add(worker.App);
+            }
+        }
+
+        /// <summary>
+        /// 检查端口冲突
+        /// </summary>
+        /// <param name="target">准备启动的应用</param>
+        /// <param name="alsoStarting">正在同时启动的其他应用（用于并发检测）</param>
+        /// <returns>检测到的冲突端口列表</returns>
+        private List<int> CheckPortConflicts(AppItem target, List<AppItem> alsoStarting)
+        {
+            var conflicts = new List<int>();
+            if (target.DetectedPorts == null || !target.DetectedPorts.Any())
+            {
+                // 启动前再次尝试探测（以防目录变更）
+                target.DetectedPorts = Utils.PortDetector.DetectPorts(target.WorkingDirectory);
+            }
+
+            if (!target.DetectedPorts.Any()) return conflicts;
+
+            // 1. 检查系统占用
+            var systemUsedPorts = Utils.NetworkUtils.GetUsedPorts();
+            foreach (var p in target.DetectedPorts)
+            {
+                if (systemUsedPorts.Contains(p)) conflicts.Add(p);
+            }
+
+            // 2. 检查与其他“正在启动”的应用冲突
+            foreach (var other in alsoStarting)
+            {
+                if (other.Id == target.Id) continue;
+                var intersection = target.DetectedPorts.Intersect(other.DetectedPorts);
+                foreach (var p in intersection)
+                {
+                    if (!conflicts.Contains(p)) conflicts.Add(p);
                 }
             }
+
+            // 3. 检查与当前正在运行的其他应用冲突
+            foreach (var worker in _workers.Values)
+            {
+                if (worker.App.Id == target.Id) continue;
+                if (worker.Status == AppStatus.Running || worker.Status == AppStatus.Starting)
+                {
+                    var intersection = target.DetectedPorts.Intersect(worker.App.DetectedPorts);
+                    foreach (var p in intersection)
+                    {
+                        if (!conflicts.Contains(p)) conflicts.Add(p);
+                    }
+                }
+            }
+
+            target.ConflictPorts = conflicts.Distinct().ToList();
+            return target.ConflictPorts;
         }
 
         public void StopAll()

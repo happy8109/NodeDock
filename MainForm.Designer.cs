@@ -16,7 +16,7 @@ namespace NodeDock
         private void InitializeComponent()
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
@@ -24,6 +24,7 @@ namespace NodeDock
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.pnlSidebar = new System.Windows.Forms.Panel();
             this.btnSetting = new System.Windows.Forms.Button();
@@ -34,21 +35,23 @@ namespace NodeDock
             this.pnlMain = new System.Windows.Forms.Panel();
             this.dgvApps = new System.Windows.Forms.DataGridView();
             this.pnlLog = new System.Windows.Forms.Panel();
-            this.pnlLogTabs = new System.Windows.Forms.FlowLayoutPanel();
             this.txtLogContent = new System.Windows.Forms.RichTextBox();
+            this.pnlLogTabs = new System.Windows.Forms.FlowLayoutPanel();
             this.statusMain = new System.Windows.Forms.StatusStrip();
             this.lblResourceStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.colIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colResource = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colPort = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colPath = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colPath = new System.Windows.Forms.DataGridViewLinkColumn();
             this.colAction = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlSidebar.SuspendLayout();
             this.pnlMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvApps)).BeginInit();
             this.pnlLog.SuspendLayout();
+            this.statusMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlSidebar
@@ -188,17 +191,18 @@ namespace NodeDock
             this.colName,
             this.colStatus,
             this.colResource,
+            this.colPort,
             this.colVersion,
             this.colPath,
             this.colAction});
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(234)))), ((int)(((byte)(254)))));
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvApps.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            dataGridViewCellStyle10.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(234)))), ((int)(((byte)(254)))));
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(31)))), ((int)(((byte)(41)))), ((int)(((byte)(55)))));
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvApps.DefaultCellStyle = dataGridViewCellStyle10;
             this.dgvApps.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(229)))), ((int)(((byte)(231)))), ((int)(((byte)(235)))));
             this.dgvApps.Location = new System.Drawing.Point(10, 10);
             this.dgvApps.MultiSelect = false;
@@ -248,7 +252,7 @@ namespace NodeDock
             this.pnlLogTabs.Location = new System.Drawing.Point(0, 0);
             this.pnlLogTabs.Name = "pnlLogTabs";
             this.pnlLogTabs.Padding = new System.Windows.Forms.Padding(5, 3, 5, 0);
-            this.pnlLogTabs.Size = new System.Drawing.Size(675, 25);
+            this.pnlLogTabs.Size = new System.Drawing.Size(675, 3);
             this.pnlLogTabs.TabIndex = 0;
             // 
             // statusMain
@@ -257,7 +261,6 @@ namespace NodeDock
             this.lblResourceStatus});
             this.statusMain.Location = new System.Drawing.Point(0, 629);
             this.statusMain.Name = "statusMain";
-            this.statusMain.Padding = new System.Windows.Forms.Padding(1, 0, 14, 0);
             this.statusMain.Size = new System.Drawing.Size(694, 22);
             this.statusMain.TabIndex = 2;
             this.statusMain.Text = "statusMain";
@@ -266,7 +269,7 @@ namespace NodeDock
             // 
             this.lblResourceStatus.BackColor = System.Drawing.Color.Transparent;
             this.lblResourceStatus.Name = "lblResourceStatus";
-            this.lblResourceStatus.Size = new System.Drawing.Size(131, 17);
+            this.lblResourceStatus.Size = new System.Drawing.Size(143, 17);
             this.lblResourceStatus.Text = "总体资源占用: 0% | 0MB";
             // 
             // colIndex
@@ -277,7 +280,7 @@ namespace NodeDock
             this.colIndex.Name = "colIndex";
             this.colIndex.ReadOnly = true;
             this.colIndex.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.colIndex.Width = 25;
+            this.colIndex.Width = 20;
             // 
             // colName
             // 
@@ -287,7 +290,6 @@ namespace NodeDock
             this.colName.Name = "colName";
             this.colName.ReadOnly = true;
             this.colName.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.colName.Width = 125;
             // 
             // colStatus
             // 
@@ -297,7 +299,7 @@ namespace NodeDock
             this.colStatus.Name = "colStatus";
             this.colStatus.ReadOnly = true;
             this.colStatus.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.colStatus.Width = 80;
+            this.colStatus.Width = 70;
             // 
             // colResource
             // 
@@ -309,35 +311,48 @@ namespace NodeDock
             this.colResource.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.colResource.Width = 80;
             // 
-            // colVersion
+            // colPort
             // 
             dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.colVersion.DefaultCellStyle = dataGridViewCellStyle6;
+            this.colPort.DefaultCellStyle = dataGridViewCellStyle6;
+            this.colPort.HeaderText = "端口";
+            this.colPort.Name = "colPort";
+            this.colPort.ReadOnly = true;
+            this.colPort.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
+            // 
+            // colVersion
+            // 
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colVersion.DefaultCellStyle = dataGridViewCellStyle7;
             this.colVersion.HeaderText = "Node 版本";
             this.colVersion.Name = "colVersion";
             this.colVersion.ReadOnly = true;
             this.colVersion.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.colVersion.Width = 80;
+            this.colVersion.Width = 70;
             // 
             // colPath
             // 
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            this.colPath.DefaultCellStyle = dataGridViewCellStyle7;
+            this.colPath.ActiveLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(37)))), ((int)(((byte)(99)))), ((int)(((byte)(235)))));
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            this.colPath.DefaultCellStyle = dataGridViewCellStyle8;
             this.colPath.HeaderText = "工作目录";
+            this.colPath.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
+            this.colPath.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(130)))), ((int)(((byte)(246)))));
             this.colPath.Name = "colPath";
             this.colPath.ReadOnly = true;
-            this.colPath.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.colPath.Width = 195;
+            this.colPath.TrackVisitedState = false;
+            this.colPath.VisitedLinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(130)))), ((int)(((byte)(246)))));
+            this.colPath.Width = 170;
             // 
             // colAction
             // 
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.colAction.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.colAction.DefaultCellStyle = dataGridViewCellStyle9;
             this.colAction.HeaderText = "操作";
             this.colAction.Name = "colAction";
             this.colAction.ReadOnly = true;
             this.colAction.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.colAction.Width = 90;
+            this.colAction.Width = 65;
             // 
             // MainForm
             // 
@@ -361,6 +376,8 @@ namespace NodeDock
             ((System.ComponentModel.ISupportInitialize)(this.dgvApps)).EndInit();
             this.pnlLog.ResumeLayout(false);
             this.pnlLog.PerformLayout();
+            this.statusMain.ResumeLayout(false);
+            this.statusMain.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -383,8 +400,9 @@ namespace NodeDock
         private System.Windows.Forms.DataGridViewTextBoxColumn colName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;
         private System.Windows.Forms.DataGridViewTextBoxColumn colResource;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colPort;
         private System.Windows.Forms.DataGridViewTextBoxColumn colVersion;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colPath;
+        private System.Windows.Forms.DataGridViewLinkColumn colPath;
         private System.Windows.Forms.DataGridViewTextBoxColumn colAction;
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.Diagnostics;
 using NodeDock.Services;
 
 namespace NodeDock
@@ -358,9 +359,14 @@ namespace NodeDock
             int index = 1;
             foreach (var app in ConfigService.Instance.Settings.AppList)
             {
-                int rowIndex = dgvApps.Rows.Add(index++, app.Name, app.Status.ToString(), "", app.NodeVersion, app.WorkingDirectory, "");
+                string ports = app.DetectedPorts != null && app.DetectedPorts.Count > 0 ? string.Join(",", app.DetectedPorts) : "";
+                
+                bool hasConflict = app.ConflictPorts != null && app.ConflictPorts.Count > 0;
+                string statusText = hasConflict ? $"! {string.Join(",", app.ConflictPorts)}" : app.Status.ToString();
+
+                int rowIndex = dgvApps.Rows.Add(index++, app.Name, statusText, "", ports, app.NodeVersion, app.WorkingDirectory, "");
                 dgvApps.Rows[rowIndex].Tag = app;
-                UpdateRowStyle(dgvApps.Rows[rowIndex], app.Status);
+                UpdateRowStyle(dgvApps.Rows[rowIndex], app.Status, hasConflict);
             }
             _isLoadingList = false;
         }
@@ -411,8 +417,16 @@ namespace NodeDock
                 var app = row.Tag as Models.AppItem;
                 if (app != null && app.Id == id)
                 {
-                    row.Cells["colStatus"].Value = status.ToString();
-                    UpdateRowStyle(row, status);
+                    bool hasConflict = app.ConflictPorts != null && app.ConflictPorts.Count > 0;
+                    string statusText = hasConflict ? $"! {string.Join(",", app.ConflictPorts)}" : status.ToString();
+                    
+                    row.Cells["colStatus"].Value = statusText;
+                    
+                    // 更新端口显示
+                    string ports = app.DetectedPorts != null && app.DetectedPorts.Count > 0 ? string.Join(",", app.DetectedPorts) : "";
+                    row.Cells["colPort"].Value = ports;
+
+                    UpdateRowStyle(row, status, hasConflict);
                     dgvApps.InvalidateRow(row.Index); // 触发重绘操作按钮
                     
                     // 同步更新日志标签按钮样式
@@ -422,26 +436,33 @@ namespace NodeDock
             }
         }
 
-        private void UpdateRowStyle(DataGridViewRow row, Models.AppStatus status)
+        private void UpdateRowStyle(DataGridViewRow row, Models.AppStatus status, bool hasConflict = false)
         {
             Color statusColor;
-            switch (status)
+            if (hasConflict)
             {
-                case Models.AppStatus.Running:
-                    statusColor = Color.FromArgb(22, 163, 74);  // 绿色
-                    break;
-                case Models.AppStatus.Error:
-                    statusColor = Color.FromArgb(220, 38, 38);  // 红色
-                    break;
-                case Models.AppStatus.Starting:
-                    statusColor = Color.FromArgb(37, 99, 235);  // 蓝色
-                    break;
-                case Models.AppStatus.Restarting:
-                    statusColor = Color.FromArgb(245, 158, 11); // 橙色
-                    break;
-                default:
-                    statusColor = Color.FromArgb(75, 85, 99);   // 灰色
-                    break;
+                statusColor = Color.FromArgb(220, 38, 38);  // 红色，表示严重冲突
+            }
+            else
+            {
+                switch (status)
+                {
+                    case Models.AppStatus.Running:
+                        statusColor = Color.FromArgb(22, 163, 74);  // 绿色
+                        break;
+                    case Models.AppStatus.Error:
+                        statusColor = Color.FromArgb(220, 38, 38);  // 红色
+                        break;
+                    case Models.AppStatus.Starting:
+                        statusColor = Color.FromArgb(37, 99, 235);  // 蓝色
+                        break;
+                    case Models.AppStatus.Restarting:
+                        statusColor = Color.FromArgb(245, 158, 11); // 橙色
+                        break;
+                    default:
+                        statusColor = Color.FromArgb(75, 85, 99);   // 灰色
+                        break;
+                }
             }
             row.Cells["colStatus"].Style.ForeColor = statusColor;
         }
@@ -496,10 +517,28 @@ namespace NodeDock
         private void dgvApps_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0 || e.ColumnIndex < 0) return;
-            if (dgvApps.Columns[e.ColumnIndex].Name != "colAction") return;
 
             var app = dgvApps.Rows[e.RowIndex].Tag as Models.AppItem;
             if (app == null) return;
+
+            // 处理路径链接点击
+            if (dgvApps.Columns[e.ColumnIndex].Name == "colPath")
+            {
+                if (!string.IsNullOrEmpty(app.WorkingDirectory))
+                {
+                    try
+                    {
+                        Process.Start("explorer.exe", $"\"{app.WorkingDirectory}\"");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"无法打开目录: {ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                return;
+            }
+
+            if (dgvApps.Columns[e.ColumnIndex].Name != "colAction") return;
 
             // 计算点击位置对应的按钮
             var cellRect = dgvApps.GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, false);

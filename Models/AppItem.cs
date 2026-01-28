@@ -43,6 +43,18 @@ namespace NodeDock.Models
         public bool AutoStart { get; set; }
         
         /// <summary>
+        /// 自动探测到的监听端口（运行态，不持久化）
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        public System.Collections.Generic.List<int> DetectedPorts { get; set; } = new System.Collections.Generic.List<int>();
+
+        /// <summary>
+        /// 当前检测到的冲突端口（运行态，不持久化）
+        /// </summary>
+        [Newtonsoft.Json.JsonIgnore]
+        public System.Collections.Generic.List<int> ConflictPorts { get; set; } = new System.Collections.Generic.List<int>();
+        
+        /// <summary>
         /// 是否开启进程守护（异常退出时自动重启）
         /// </summary>
         public bool EnableAutoRestart { get; set; }

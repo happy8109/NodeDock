@@ -36,6 +36,7 @@ namespace NodeDock.Services
         }
 
         public AppStatus Status => _app.Status;
+        public AppItem App => _app;
 
         public void Start()
         {
