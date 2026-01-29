@@ -63,8 +63,13 @@ namespace NodeDock.Services
                 _process = new Process();
                 string nodeDir = Path.GetDirectoryName(_nodeExePath);
                 
-                // 智能识别启动类型
+                // 智能处理入口脚本：如果用户习惯性输入了 "node app.js"，自动剥离前面的 "node "
                 string entry = _app.EntryScript?.Trim() ?? "";
+                if (entry.StartsWith("node ", StringComparison.OrdinalIgnoreCase))
+                {
+                    entry = entry.Substring(5).Trim();
+                }
+
                 bool isNpm = entry.StartsWith("npm ", StringComparison.OrdinalIgnoreCase) || 
                            entry.Equals("npm", StringComparison.OrdinalIgnoreCase);
 
@@ -90,7 +95,7 @@ namespace NodeDock.Services
                     // 处理普通 node 执行
                     _process.StartInfo.FileName = _nodeExePath;
                     string args = string.IsNullOrEmpty(_app.Arguments) ? "" : _app.Arguments + " ";
-                    _process.StartInfo.Arguments = args + $"\"{_app.EntryScript}\"";
+                    _process.StartInfo.Arguments = args + $"\"{entry}\"";
                 }
 
                 // 环境隔离
