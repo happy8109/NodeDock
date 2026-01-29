@@ -119,6 +119,12 @@ namespace NodeDock.Services
                     _process.StartInfo.EnvironmentVariables["PATH"] = runtimeDir + ";" + oldPath;
                 }
 
+                // 注入 Windows 7 兼容性环境变量
+                if (ConfigService.Instance.Settings.EnableNodeWin7Compatibility)
+                {
+                    _process.StartInfo.EnvironmentVariables["NODE_SKIP_PLATFORM_CHECK"] = "1";
+                }
+
                 // 绑定输出流
                 _process.OutputDataReceived += (s, e) => { if (e.Data != null) OnOutputReceived(e.Data); };
                 _process.ErrorDataReceived += (s, e) => { if (e.Data != null) OnOutputReceived("[ERROR] " + e.Data); };

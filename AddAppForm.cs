@@ -65,7 +65,7 @@ namespace NodeDock
             if (!string.IsNullOrEmpty(_detectedNodeVersion))
             {
                 // 更新下载按钮提示
-                btnDownloadNode.Text = "下载 ⭐";
+                btnDownloadNode.Text = "下载 *";
                 toolTip.SetToolTip(btnDownloadNode, $"检测到项目需要: {_detectedNodeVersion}");
                 
                 // 尝试自动选择匹配的已安装版本

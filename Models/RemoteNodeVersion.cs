@@ -26,6 +26,11 @@ namespace NodeDock.Models
         /// </summary>
         public bool IsSystemVersion { get; set; }
 
+        /// <summary>
+        /// 标记该版本是否为 Windows 7 最后支持的版本 (v13.14.0)
+        /// </summary>
+        public bool IsWin7Last { get; set; }
+
         public bool IsLts => Lts != null && Lts.ToString().ToLower() != "false";
         
         public string LtsName => IsLts ? Lts.ToString() : "";
@@ -40,6 +45,7 @@ namespace NodeDock.Models
                 var tags = "";
                 if (IsSystemVersion) tags += " [系统环境]";
                 if (IsRecommended) tags += " [推荐]";
+                if (IsWin7Last) tags += " [Win7最后支持版本]";
                 
                 return baseName + tags;
             }

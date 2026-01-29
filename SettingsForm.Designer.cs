@@ -25,6 +25,7 @@ namespace NodeDock
             this.rbMirrorTaobao = new System.Windows.Forms.RadioButton();
             this.rbMirrorOfficial = new System.Windows.Forms.RadioButton();
             this.chkAutoStart = new System.Windows.Forms.CheckBox();
+            this.chkWin7Compatibility = new System.Windows.Forms.CheckBox();
             this.btnDownload = new System.Windows.Forms.Button();
             this.grpMirror.SuspendLayout();
             this.SuspendLayout();
@@ -152,13 +153,25 @@ namespace NodeDock
             this.chkAutoStart.UseVisualStyleBackColor = true;
             this.chkAutoStart.CheckedChanged += new System.EventHandler(this.chkAutoStart_CheckedChanged);
             // 
+            // chkWin7Compatibility
+            // 
+            this.chkWin7Compatibility.AutoSize = true;
+            this.chkWin7Compatibility.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(65)))), ((int)(((byte)(81)))));
+            this.chkWin7Compatibility.Location = new System.Drawing.Point(20, 335);
+            this.chkWin7Compatibility.Name = "chkWin7Compatibility";
+            this.chkWin7Compatibility.Size = new System.Drawing.Size(222, 16);
+            this.chkWin7Compatibility.TabIndex = 9;
+            this.chkWin7Compatibility.Text = "开启 Windows 7 兼容模式 (跳过检测)";
+            this.chkWin7Compatibility.UseVisualStyleBackColor = true;
+            this.chkWin7Compatibility.CheckedChanged += new System.EventHandler(this.chkWin7Compatibility_CheckedChanged);
+            // 
             // btnClose
             // 
             this.btnClose.BackColor = System.Drawing.Color.White;
             this.btnClose.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(213)))), ((int)(((byte)(219)))));
             this.btnClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnClose.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(65)))), ((int)(((byte)(81)))));
-            this.btnClose.Location = new System.Drawing.Point(275, 305);
+            this.btnClose.Location = new System.Drawing.Point(275, 330);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(85, 28);
             this.btnClose.TabIndex = 7;
@@ -171,7 +184,8 @@ namespace NodeDock
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(250)))), ((int)(((byte)(251)))));
-            this.ClientSize = new System.Drawing.Size(380, 350);
+            this.ClientSize = new System.Drawing.Size(380, 375);
+            this.Controls.Add(this.chkWin7Compatibility);
             this.Controls.Add(this.btnDownload);
             this.Controls.Add(this.chkAutoStart);
             this.Controls.Add(this.grpMirror);
@@ -204,6 +218,7 @@ namespace NodeDock
         private System.Windows.Forms.RadioButton rbMirrorTaobao;
         private System.Windows.Forms.RadioButton rbMirrorOfficial;
         private System.Windows.Forms.CheckBox chkAutoStart;
+        private System.Windows.Forms.CheckBox chkWin7Compatibility;
         private System.Windows.Forms.Button btnDownload;
     }
 }

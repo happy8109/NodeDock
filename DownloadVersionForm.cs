@@ -59,6 +59,9 @@ namespace NodeDock
                 // 标记推荐版本
                 MarkRecommendedVersions();
                 
+                // 标记 Windows 7 最后支持版本
+                MarkWin7LastVersion();
+                
                 UpdateList("");
                 
                 if (!string.IsNullOrEmpty(_requiredVersion))
@@ -91,6 +94,21 @@ namespace NodeDock
                 if (version.Version == systemVersion)
                 {
                     version.IsSystemVersion = true;
+                    break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 标记 Windows 7 最后支持版本 (v13.14.0)
+        /// </summary>
+        private void MarkWin7LastVersion()
+        {
+            foreach (var version in _allVersions)
+            {
+                if (version.Version == "v13.14.0")
+                {
+                    version.IsWin7Last = true;
                     break;
                 }
             }
@@ -145,7 +163,7 @@ namespace NodeDock
             lstVersions.Items.Clear();
             
             var filtered = _allVersions
-                .Where(v => v.IsLts && (string.IsNullOrEmpty(filter) || v.Version.Contains(filter)))
+                .Where(v => (v.IsLts || v.IsWin7Last) && (string.IsNullOrEmpty(filter) || v.Version.Contains(filter)))
                 .OrderByDescending(v => v.IsRecommended) // 推荐版本优先
                 .ThenByDescending(v => v.Version)
                 .ToList();

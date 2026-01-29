@@ -36,11 +36,13 @@ namespace NodeDock.Services
             {
                 string json = await _httpClient.GetStringAsync(VersionListUrl);
                 var versions = JsonConvert.DeserializeObject<List<RemoteNodeVersion>>(json);
-                // 只显示 v16+ 的 LTS 版本
                 return versions.Where(v => 
                     v.Files.Contains("win-x64-zip") && 
-                    v.Lts != null &&                    // 只要 LTS 版本
-                    GetMajorVersion(v.Version) >= 16    // 只要 v16+
+                    (
+                        (v.Lts != null && GetMajorVersion(v.Version) >= 16) || // v16+ 的 LTS 版本
+                        v.Version == "v13.14.0" ||                          // 或者是 v13.14.0 (Win7 最后支持版本)
+                        v.Version == "v18.16.1"                             // 或者是 v18.16.1 (用户要求)
+                    )
                 ).ToList();
             }
             catch (Exception ex)

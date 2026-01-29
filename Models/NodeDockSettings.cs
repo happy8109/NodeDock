@@ -32,7 +32,12 @@ namespace NodeDock.Models
         /// 官方源: https://nodejs.org/dist/
         /// 淘宝镜像: https://npmmirror.com/mirrors/node/
         /// </summary>
-        public string MirrorSource { get; set; } = "https://nodejs.org/dist/";
+        public string MirrorSource { get; set; } = MirrorSources.Official;
+
+        /// <summary>
+        /// 是否开启 Node.js Windows 7 兼容模式 (注入 NODE_SKIP_PLATFORM_CHECK=1)
+        /// </summary>
+        public bool EnableNodeWin7Compatibility { get; set; } = false;
     }
     
     /// <summary>

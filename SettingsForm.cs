@@ -29,6 +29,7 @@ namespace NodeDock
             UpdateDefaultLabel();
             LoadMirrorSetting();
             LoadAutoStartSetting();
+            LoadWin7CompatibilitySetting();
             
             _isLoading = false;
         }
@@ -115,6 +116,34 @@ namespace NodeDock
             catch
             {
                 chkAutoStart.Checked = false;
+            }
+        }
+
+        /// <summary>
+        /// 加载 Windows 7 兼容性设置
+        /// </summary>
+        private void LoadWin7CompatibilitySetting()
+        {
+            var os = Environment.OSVersion.Version;
+            // Windows 7 版本号为 6.1
+            bool isWin7OrLower = os.Major < 6 || (os.Major == 6 && os.Minor <= 1);
+
+            if (!isWin7OrLower)
+            {
+                chkWin7Compatibility.Enabled = false;
+                chkWin7Compatibility.Checked = false;
+                //chkWin7Compatibility.Text += " (当前系统无需开启)";
+                
+                // 如果之前强行开启了，也关掉并保存
+                if (ConfigService.Instance.Settings.EnableNodeWin7Compatibility)
+                {
+                    ConfigService.Instance.Settings.EnableNodeWin7Compatibility = false;
+                    ConfigService.Instance.Save();
+                }
+            }
+            else
+            {
+                chkWin7Compatibility.Checked = ConfigService.Instance.Settings.EnableNodeWin7Compatibility;
             }
         }
 
@@ -265,6 +294,16 @@ namespace NodeDock
                 chkAutoStart.Checked = !chkAutoStart.Checked;
                 _isLoading = false;
             }
+        }
+
+        /// <summary>
+        /// Windows 7 兼容性选项变更
+        /// </summary>
+        private void chkWin7Compatibility_CheckedChanged(object sender, EventArgs e)
+        {
+            if (_isLoading) return;
+            ConfigService.Instance.Settings.EnableNodeWin7Compatibility = chkWin7Compatibility.Checked;
+            ConfigService.Instance.Save();
         }
         
         /// <summary>

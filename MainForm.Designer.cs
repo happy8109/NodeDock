@@ -83,7 +83,7 @@ namespace NodeDock
             this.btnSetting.Size = new System.Drawing.Size(90, 36);
             this.btnSetting.TabIndex = 4;
             this.btnSetting.TabStop = false;
-            this.btnSetting.Text = "⚙ 设置";
+            this.btnSetting.Text = "设置";
             this.btnSetting.UseVisualStyleBackColor = false;
             this.btnSetting.Click += new System.EventHandler(this.btnSetting_Click);
             // 
@@ -101,7 +101,7 @@ namespace NodeDock
             this.btnAddApp.Size = new System.Drawing.Size(90, 36);
             this.btnAddApp.TabIndex = 3;
             this.btnAddApp.TabStop = false;
-            this.btnAddApp.Text = "➕ 添加";
+            this.btnAddApp.Text = "+ 添加";
             this.btnAddApp.UseVisualStyleBackColor = false;
             this.btnAddApp.Click += new System.EventHandler(this.btnAddApp_Click);
             // 
@@ -119,7 +119,7 @@ namespace NodeDock
             this.btnStopAll.Size = new System.Drawing.Size(90, 36);
             this.btnStopAll.TabIndex = 2;
             this.btnStopAll.TabStop = false;
-            this.btnStopAll.Text = "⏹ 全停";
+            this.btnStopAll.Text = "■ 全停";
             this.btnStopAll.UseVisualStyleBackColor = false;
             this.btnStopAll.Click += new System.EventHandler(this.btnStopAll_Click);
             // 
