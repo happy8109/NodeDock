@@ -47,7 +47,8 @@ namespace NodeDock.Utils
                     {
                         // 匹配 PORT=3000, SERVER_PORT=3000 等
                         var match = Regex.Match(line, @"^\s*(?:PORT|SERVER_PORT|APP_PORT|WEB_PORT)\s*=\s*(?<port>\d+)", RegexOptions.IgnoreCase);
-                        if (match.Success && int.TryParse(match.Groups["port"].Value, out int p))
+                        int p;
+                        if (match.Success && int.TryParse(match.Groups["port"].Value, out p))
                         {
                             if (p > 0 && p < 65536) ports.Add(p);
                         }
@@ -84,9 +85,10 @@ namespace NodeDock.Utils
                             // 兼容 JSON: "port": 3000
                             // 兼容 YAML: port: 3000
                             var matches = Regex.Matches(content, @"(?:""?[\w-]*port\w*""?)\s*[:=]\s*(?<port>\d+)", RegexOptions.IgnoreCase);
+                            int p;
                             foreach (Match match in matches)
                             {
-                                if (int.TryParse(match.Groups["port"].Value, out int p))
+                                if (int.TryParse(match.Groups["port"].Value, out p))
                                 {
                                     if (p > 0 && p < 65536) ports.Add(p);
                                 }
@@ -109,9 +111,10 @@ namespace NodeDock.Utils
                     string content = File.ReadAllText(pkgPath);
                     // 1. 匹配 --port 3000 或 PORT=3000 在脚本中
                     var matches = Regex.Matches(content, @"(?:--port|PORT=)\s*(?<port>\d+)", RegexOptions.IgnoreCase);
+                    int p;
                     foreach (Match match in matches)
                     {
-                        if (int.TryParse(match.Groups["port"].Value, out int p))
+                        if (int.TryParse(match.Groups["port"].Value, out p))
                         {
                             if (p > 0 && p < 65536) ports.Add(p);
                         }
@@ -121,7 +124,7 @@ namespace NodeDock.Utils
                     var jsonMatches = Regex.Matches(content, @"""[\w-]*port\w*""\s*:\s*(?<port>\d+)", RegexOptions.IgnoreCase);
                     foreach (Match match in jsonMatches)
                     {
-                        if (int.TryParse(match.Groups["port"].Value, out int p))
+                        if (int.TryParse(match.Groups["port"].Value, out p))
                         {
                             if (p > 0 && p < 65536) ports.Add(p);
                         }
@@ -163,9 +166,10 @@ namespace NodeDock.Utils
                 string content = File.ReadAllText(path);
                 // 1. 匹配 .listen(3000)
                 var matches = Regex.Matches(content, @".listen\(\s*(?<port>\d+)", RegexOptions.IgnoreCase);
+                int p;
                 foreach (Match match in matches)
                 {
-                    if (int.TryParse(match.Groups["port"].Value, out int p))
+                    if (int.TryParse(match.Groups["port"].Value, out p))
                     {
                         if (p > 0 && p < 65536) ports.Add(p);
                     }
@@ -175,7 +179,7 @@ namespace NodeDock.Utils
                 var constMatches = Regex.Matches(content, @"(?:const|let|var)\s+\w*port\w*\s*=\s*(?<port>\d+)", RegexOptions.IgnoreCase);
                 foreach (Match match in constMatches)
                 {
-                    if (int.TryParse(match.Groups["port"].Value, out int p))
+                    if (int.TryParse(match.Groups["port"].Value, out p))
                     {
                         if (p > 0 && p < 65536) ports.Add(p);
                     }

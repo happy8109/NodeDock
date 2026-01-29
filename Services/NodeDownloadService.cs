@@ -59,7 +59,8 @@ namespace NodeDock.Services
             if (string.IsNullOrEmpty(version)) return 0;
             version = version.TrimStart('v');
             var parts = version.Split('.');
-            if (parts.Length > 0 && int.TryParse(parts[0], out int major))
+            int major;
+            if (parts.Length > 0 && int.TryParse(parts[0], out major))
             {
                 return major;
             }

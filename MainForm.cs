@@ -345,8 +345,10 @@ namespace NodeDock
         private void LogTabButton_Paint(object sender, PaintEventArgs e)
         {
             var btn = sender as Button;
-            if (btn?.Tag is Color statusColor)
+            var statusColorObj = btn.Tag;
+            if (statusColorObj is Color)
             {
+                Color statusColor = (Color)statusColorObj;
                 // 绘制彩色圆点
                 using (var brush = new SolidBrush(statusColor))
                 {

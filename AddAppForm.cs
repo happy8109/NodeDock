@@ -87,7 +87,8 @@ namespace NodeDock
 
             foreach (var item in cmbVersion.Items)
             {
-                if (item is NodeRuntimeInfo runtime)
+                var runtime = item as NodeRuntimeInfo;
+                if (runtime != null)
                 {
                     // 检查运行时版本是否满足需求
                     if (PackageJsonService.IsVersionSatisfied(runtime.Name, _detectedNodeVersion))

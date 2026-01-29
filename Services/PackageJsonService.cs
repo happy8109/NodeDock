@@ -123,7 +123,8 @@ namespace NodeDock.Services
             {
                 // 尝试匹配常见格式: ^18, ~18, >=18, 18.x, 18
                 var match = Regex.Match(requirement, @"[\^~>=<]*(\d+)");
-                if (match.Success && int.TryParse(match.Groups[1].Value, out int major))
+                int major;
+                if (match.Success && int.TryParse(match.Groups[1].Value, out major))
                 {
                     return major;
                 }
@@ -140,9 +141,10 @@ namespace NodeDock.Services
             
             // 补全版本号为三段式
             var parts = cleanVersion.Split('.');
-            int major = parts.Length > 0 && int.TryParse(parts[0], out int m) ? m : 0;
-            int minor = parts.Length > 1 && int.TryParse(parts[1], out int n) ? n : 0;
-            int patch = parts.Length > 2 && int.TryParse(parts[2], out int p) ? p : 0;
+            int m, n, p;
+            int major = parts.Length > 0 && int.TryParse(parts[0], out m) ? m : 0;
+            int minor = parts.Length > 1 && int.TryParse(parts[1], out n) ? n : 0;
+            int patch = parts.Length > 2 && int.TryParse(parts[2], out p) ? p : 0;
 
             return new Version(major, minor, patch);
         }
@@ -155,7 +157,8 @@ namespace NodeDock.Services
             if (condition.Contains("x") || condition.Contains("*") || Regex.IsMatch(condition, @"^\d+$"))
             {
                 var match = Regex.Match(condition, @"^(\d+)");
-                if (match.Success && int.TryParse(match.Groups[1].Value, out int major))
+                int major;
+                if (match.Success && int.TryParse(match.Groups[1].Value, out major))
                 {
                     return version.Major == major;
                 }

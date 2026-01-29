@@ -150,7 +150,8 @@ namespace NodeDock
         {
             var cleanVersion = version.TrimStart('v');
             var parts = cleanVersion.Split('.');
-            if (parts.Length > 0 && int.TryParse(parts[0], out int major))
+            int major;
+            if (parts.Length > 0 && int.TryParse(parts[0], out major))
             {
                 return major;
             }
@@ -192,7 +193,8 @@ namespace NodeDock
 
         private async void btnDownload_Click(object sender, EventArgs e)
         {
-            if (lstVersions.SelectedItem is RemoteNodeVersion version)
+            var version = lstVersions.SelectedItem as RemoteNodeVersion;
+            if (version != null)
             {
                 await StartDownload(version.Version);
             }

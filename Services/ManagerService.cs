@@ -77,7 +77,8 @@ namespace NodeDock.Services
 
         public void StartApp(string appId)
         {
-            if (_workers.TryGetValue(appId, out var worker))
+            NodeProcessWorker worker;
+            if (_workers.TryGetValue(appId, out worker))
             {
                 var conflicts = CheckPortConflicts(worker.App, new List<AppItem>());
                 if (conflicts.Any())
@@ -92,7 +93,8 @@ namespace NodeDock.Services
 
         public void StopApp(string appId)
         {
-            if (_workers.TryGetValue(appId, out var worker))
+            NodeProcessWorker worker;
+            if (_workers.TryGetValue(appId, out worker))
             {
                 worker.Stop();
             }

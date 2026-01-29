@@ -152,7 +152,8 @@ namespace NodeDock
         /// </summary>
         private void btnSetDefault_Click(object sender, EventArgs e)
         {
-            if (lstVersions.SelectedItem is NodeRuntimeInfo runtime)
+            var runtime = lstVersions.SelectedItem as NodeRuntimeInfo;
+            if (runtime != null)
             {
                 ConfigService.Instance.Settings.DefaultNodeVersion = runtime.Name;
                 ConfigService.Instance.Save();
@@ -170,7 +171,8 @@ namespace NodeDock
         /// </summary>
         private void btnDelete_Click(object sender, EventArgs e)
         {
-            if (!(lstVersions.SelectedItem is NodeRuntimeInfo runtime))
+            var runtime = lstVersions.SelectedItem as NodeRuntimeInfo;
+            if (runtime == null)
             {
                 return;
             }
