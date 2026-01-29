@@ -78,7 +78,8 @@ namespace NodeDock.Utils
             IntPtr ptr = Marshal.AllocHGlobal(length);
             try
             {
-                if (!QueryInformationJobObject(_handle, JobObjectInfoType.BasicAccountingInformation, ptr, (uint)length, out _))
+                uint returnLength;
+                if (!QueryInformationJobObject(_handle, JobObjectInfoType.BasicAccountingInformation, ptr, (uint)length, out returnLength))
                 {
                     return 0;
                 }
@@ -105,7 +106,8 @@ namespace NodeDock.Utils
 
             try
             {
-                if (QueryInformationJobObject(_handle, JobObjectInfoType.BasicProcessIdList, ptr, (uint)length, out _))
+                uint returnLength;
+                if (QueryInformationJobObject(_handle, JobObjectInfoType.BasicProcessIdList, ptr, (uint)length, out returnLength))
                 {
                     var list = (JOBOBJECT_BASIC_PROCESS_ID_LIST)Marshal.PtrToStructure(ptr, typeof(JOBOBJECT_BASIC_PROCESS_ID_LIST));
                     for (int i = 0; i < list.NumberOfProcessIdsInList; i++)
