@@ -106,6 +106,7 @@
     <Compile Include="Utils\JobObject.cs" />
     <Compile Include="Utils\NetworkUtils.cs" />
     <Compile Include="Utils\PortDetector.cs" />
+    <Compile Include="Utils\Win7CompatibilityUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

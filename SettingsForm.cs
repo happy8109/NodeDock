@@ -304,6 +304,9 @@ namespace NodeDock
             if (_isLoading) return;
             ConfigService.Instance.Settings.EnableNodeWin7Compatibility = chkWin7Compatibility.Checked;
             ConfigService.Instance.Save();
+
+            // 立即应用/移除系统环境变量
+            Utils.Win7CompatibilityUtil.Apply(chkWin7Compatibility.Checked);
         }
         
         /// <summary>

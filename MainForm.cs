@@ -41,6 +41,9 @@ namespace NodeDock
             
             // 初始化服务
             ManagerService.Instance.Initialize();
+
+            // 应用 Windows 7 兼容性设置
+            Utils.Win7CompatibilityUtil.Apply(ConfigService.Instance.Settings.EnableNodeWin7Compatibility);
             
             // 绑定全局事件
             ManagerService.Instance.GlobalStatusChanged += (id, status) => {
