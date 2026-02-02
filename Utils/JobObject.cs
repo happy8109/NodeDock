@@ -26,6 +26,10 @@ namespace NodeDock.Utils
         [return: MarshalAs(UnmanagedType.Bool)]
         private static extern bool CloseHandle(IntPtr hObject);
 
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        private static extern bool TerminateJobObject(IntPtr hJob, uint uExitCode);
+
         private IntPtr _handle;
         private bool _disposed;
 
@@ -123,6 +127,19 @@ namespace NodeDock.Utils
             }
 
             return pids;
+        }
+
+        /// <summary>
+        /// 主动终止作业中的所有进程（用于 Windows 7 兼容）
+        /// </summary>
+        /// <param name="exitCode">退出码</param>
+        /// <returns>是否成功终止</returns>
+        public bool Terminate(uint exitCode = 1)
+        {
+            if (_handle == IntPtr.Zero || _disposed)
+                return false;
+
+            return TerminateJobObject(_handle, exitCode);
         }
 
         public void Dispose()

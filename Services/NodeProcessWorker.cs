@@ -254,7 +254,9 @@ namespace NodeDock.Services
             {
                 if (_jobObject != null)
                 {
-                    // 释放 JobObject 会导致所有关联进程（包括子进程）被 Windows 自动终止
+                    // 主动终止所有关联进程（解决 Windows 7 下 KILL_ON_JOB_CLOSE 不生效的问题）
+                    _jobObject.Terminate(1);
+                    // 释放 JobObject
                     _jobObject.Dispose();
                     _jobObject = null;
                 }
