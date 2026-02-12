@@ -74,6 +74,10 @@ namespace NodeDock
             btnStopAll.Enter += (s, e) => pnlSidebar.Focus();
             btnAddApp.Enter += (s, e) => pnlSidebar.Focus();
             btnSetting.Enter += (s, e) => pnlSidebar.Focus();
+
+            // 显示版本号
+            var version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            lblVersion.Text = $"v{version.Major}.{version.Minor}.{version.Build}";
         }
 
         private void SetupAppContextMenu()

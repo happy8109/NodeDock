@@ -5,6 +5,19 @@ namespace NodeDock.Utils
 {
     public static class Win7CompatibilityUtil
     {
+        /// <summary>
+        /// 判断当前操作系统是否为 Windows 7 或更低版本
+        /// Windows 7 = 6.1, Windows 8 = 6.2, Windows 10 = 10.0
+        /// </summary>
+        public static bool IsWindows7OrLower
+        {
+            get
+            {
+                var os = Environment.OSVersion.Version;
+                return os.Major < 6 || (os.Major == 6 && os.Minor <= 1);
+            }
+        }
+
         private const string EnvVarName = "NODE_SKIP_PLATFORM_CHECK";
         private const int WM_SETTINGCHANGE = 0x001A;
         private static readonly IntPtr HWND_BROADCAST = new IntPtr(0xffff);

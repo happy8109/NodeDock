@@ -56,9 +56,13 @@ namespace NodeDock.Services
             {
                 OnStatusChanged(AppStatus.Starting);
 
-                // 创建作业对象以实现管理
-                _jobObject?.Dispose();
-                _jobObject = new JobObject();
+                // Windows 10+：创建作业对象以管理进程树
+                // Windows 7：跳过 JobObject（不支持嵌套 Job）
+                if (!Win7CompatibilityUtil.IsWindows7OrLower)
+                {
+                    _jobObject?.Dispose();
+                    _jobObject = new JobObject();
+                }
 
                 _process = new Process();
                 string nodeDir = Path.GetDirectoryName(_nodeExePath);
@@ -124,8 +128,6 @@ namespace NodeDock.Services
                     _process.StartInfo.EnvironmentVariables["PATH"] = runtimeDir + ";" + oldPath;
                 }
 
-
-
                 // 绑定输出流
                 _process.OutputDataReceived += (s, e) => { if (e.Data != null) OnOutputReceived(e.Data); };
                 _process.ErrorDataReceived += (s, e) => { if (e.Data != null) OnOutputReceived("[ERROR] " + e.Data); };
@@ -136,14 +138,17 @@ namespace NodeDock.Services
 
                 if (_process.Start())
                 {
-                    // 将进程添加到作业对象中
-                    try
+                    // Windows 10+：将进程绑定到 JobObject
+                    if (_jobObject != null)
                     {
-                        _jobObject.AddProcess(_process.Handle);
-                    }
-                    catch (Exception ex)
-                    {
-                        OnOutputReceived($"警告：无法建立 Job 绑定 ({ex.Message})，子进程清理可能失效。");
+                        try
+                        {
+                            _jobObject.AddProcess(_process.Handle);
+                        }
+                        catch (Exception ex)
+                        {
+                            OnOutputReceived($"警告：无法建立 Job 绑定 ({ex.Message})，子进程清理可能失效。");
+                        }
                     }
 
                     _process.BeginOutputReadLine();
@@ -254,15 +259,15 @@ namespace NodeDock.Services
             {
                 if (_jobObject != null)
                 {
-                    // 主动终止所有关联进程（解决 Windows 7 下 KILL_ON_JOB_CLOSE 不生效的问题）
+                    // ===== Windows 10+ 路径：通过 JobObject 终止进程树 =====
                     _jobObject.Terminate(1);
-                    // 释放 JobObject
                     _jobObject.Dispose();
                     _jobObject = null;
                 }
                 else if (_process != null && !_process.HasExited)
                 {
-                    _process.Kill();
+                    // ===== Windows 7 路径：通过 taskkill 终止进程树 =====
+                    KillProcessTree(_process.Id);
                 }
             }
             catch (Exception ex)
@@ -272,11 +277,44 @@ namespace NodeDock.Services
         }
 
         /// <summary>
+        /// 使用 taskkill /F /T 终止进程及其所有子进程（Windows 7 兼容方式）
+        /// </summary>
+        private void KillProcessTree(int pid)
+        {
+            try
+            {
+                var taskkill = new Process();
+                taskkill.StartInfo.FileName = "taskkill";
+                taskkill.StartInfo.Arguments = $"/F /T /PID {pid}";
+                taskkill.StartInfo.CreateNoWindow = true;
+                taskkill.StartInfo.UseShellExecute = false;
+                taskkill.StartInfo.RedirectStandardOutput = true;
+                taskkill.StartInfo.RedirectStandardError = true;
+                taskkill.Start();
+                taskkill.WaitForExit(5000);
+            }
+            catch (Exception ex)
+            {
+                OnOutputReceived($"taskkill 失败：{ex.Message}");
+                
+                // 最终兜底：直接 Kill 主进程
+                try
+                {
+                    if (_process != null && !_process.HasExited)
+                    {
+                        _process.Kill();
+                    }
+                }
+                catch { }
+            }
+        }
+
+        /// <summary>
         /// 更新资源占用信息（CPU和内存）
         /// </summary>
         public void UpdateResourceUsage()
         {
-            if (_jobObject == null || _app.Status != AppStatus.Running)
+            if (_app.Status != AppStatus.Running)
             {
                 _app.CpuUsage = 0;
                 _app.MemoryUsage = 0;
@@ -286,41 +324,69 @@ namespace NodeDock.Services
 
             try
             {
-                // 1. 获取 CPU 使用率
-                long currentCpuTime = _jobObject.GetCpuTime();
-                DateTime currentSampleTime = DateTime.Now;
-
-                if (_lastSampleTime != DateTime.MinValue && _lastCpuTime > 0)
+                if (_jobObject != null)
                 {
-                    long cpuTimeDelta = currentCpuTime - _lastCpuTime;
-                    double timeDelta = (currentSampleTime - _lastSampleTime).TotalMilliseconds * 10000; // 转换为 100ns 单位
+                    // ===== Windows 10+ 路径：通过 JobObject 获取进程树资源 =====
+                    long currentCpuTime = _jobObject.GetCpuTime();
+                    DateTime currentSampleTime = DateTime.Now;
 
-                    if (timeDelta > 0)
+                    if (_lastSampleTime != DateTime.MinValue && _lastCpuTime > 0)
                     {
-                        // 计算百分比并除以 CPU 核心数
-                        float usage = (float)((cpuTimeDelta / timeDelta) * 100.0 / Environment.ProcessorCount);
-                        _app.CpuUsage = Math.Max(0, Math.Min(100, usage));
-                    }
-                }
+                        long cpuTimeDelta = currentCpuTime - _lastCpuTime;
+                        double timeDelta = (currentSampleTime - _lastSampleTime).TotalMilliseconds * 10000;
 
-                _lastCpuTime = currentCpuTime;
-                _lastSampleTime = currentSampleTime;
-
-                // 2. 获取进程树总内存占用
-                long totalMemory = 0;
-                var pids = _jobObject.GetProcessIds();
-                foreach (int pid in pids)
-                {
-                    try
-                    {
-                        using (var p = Process.GetProcessById(pid))
+                        if (timeDelta > 0)
                         {
-                            totalMemory += p.WorkingSet64;
+                            float usage = (float)((cpuTimeDelta / timeDelta) * 100.0 / Environment.ProcessorCount);
+                            _app.CpuUsage = Math.Max(0, Math.Min(100, usage));
                         }
                     }
-                    catch { /* 进程可能已退出 */ }
+
+                    _lastCpuTime = currentCpuTime;
+                    _lastSampleTime = currentSampleTime;
+
+                    long totalMemory = 0;
+                    var pids = _jobObject.GetProcessIds();
+                    foreach (int pid in pids)
+                    {
+                        try
+                        {
+                            using (var p = Process.GetProcessById(pid))
+                            {
+                                totalMemory += p.WorkingSet64;
+                            }
+                        }
+                        catch { /* 进程可能已退出 */ }
+                    }
+                    _app.MemoryUsage = totalMemory;
                 }
-                _app.MemoryUsage = totalMemory;
+                else if (_process != null && !_process.HasExited)
+                {
+                    // ===== Windows 7 路径：仅监控主进程 =====
+                    DateTime currentSampleTime = DateTime.Now;
+                    long currentCpuTime = (long)(_process.TotalProcessorTime.TotalMilliseconds * 10000);
+
+                    if (_lastSampleTime != DateTime.MinValue && _lastCpuTime > 0)
+                    {
+                        long cpuTimeDelta = currentCpuTime - _lastCpuTime;
+                        double timeDelta = (currentSampleTime - _lastSampleTime).TotalMilliseconds * 10000;
+
+                        if (timeDelta > 0)
+                        {
+                            float usage = (float)((cpuTimeDelta / timeDelta) * 100.0 / Environment.ProcessorCount);
+                            _app.CpuUsage = Math.Max(0, Math.Min(100, usage));
+                        }
+                    }
+
+                    _lastCpuTime = currentCpuTime;
+                    _lastSampleTime = currentSampleTime;
+                    _app.MemoryUsage = _process.WorkingSet64;
+                }
+                else
+                {
+                    _app.CpuUsage = 0;
+                    _app.MemoryUsage = 0;
+                }
             }
             catch
             {

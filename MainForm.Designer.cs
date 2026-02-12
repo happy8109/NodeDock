@@ -34,11 +34,6 @@ namespace NodeDock
             this.lblLogo = new System.Windows.Forms.Label();
             this.pnlMain = new System.Windows.Forms.Panel();
             this.dgvApps = new System.Windows.Forms.DataGridView();
-            this.pnlLog = new System.Windows.Forms.Panel();
-            this.txtLogContent = new System.Windows.Forms.RichTextBox();
-            this.pnlLogTabs = new System.Windows.Forms.FlowLayoutPanel();
-            this.statusMain = new System.Windows.Forms.StatusStrip();
-            this.lblResourceStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.colIndex = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -47,6 +42,13 @@ namespace NodeDock
             this.colVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colPath = new System.Windows.Forms.DataGridViewLinkColumn();
             this.colAction = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.pnlLog = new System.Windows.Forms.Panel();
+            this.txtLogContent = new System.Windows.Forms.RichTextBox();
+            this.pnlLogTabs = new System.Windows.Forms.FlowLayoutPanel();
+            this.statusMain = new System.Windows.Forms.StatusStrip();
+            this.lblResourceStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lblSpring = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lblVersion = new System.Windows.Forms.ToolStripStatusLabel();
             this.pnlSidebar.SuspendLayout();
             this.pnlMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvApps)).BeginInit();
@@ -217,61 +219,6 @@ namespace NodeDock
             this.dgvApps.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvApps_CellPainting);
             this.dgvApps.SelectionChanged += new System.EventHandler(this.dgvApps_SelectionChanged);
             // 
-            // pnlLog
-            // 
-            this.pnlLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pnlLog.BackColor = System.Drawing.Color.White;
-            this.pnlLog.Controls.Add(this.txtLogContent);
-            this.pnlLog.Controls.Add(this.pnlLogTabs);
-            this.pnlLog.Location = new System.Drawing.Point(10, 385);
-            this.pnlLog.Name = "pnlLog";
-            this.pnlLog.Size = new System.Drawing.Size(675, 165);
-            this.pnlLog.TabIndex = 2;
-            // 
-            // txtLogContent
-            // 
-            this.txtLogContent.BackColor = System.Drawing.Color.White;
-            this.txtLogContent.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtLogContent.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtLogContent.Font = new System.Drawing.Font("Consolas", 9F);
-            this.txtLogContent.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
-            this.txtLogContent.Location = new System.Drawing.Point(0, 3);
-            this.txtLogContent.Name = "txtLogContent";
-            this.txtLogContent.ReadOnly = true;
-            this.txtLogContent.Size = new System.Drawing.Size(675, 162);
-            this.txtLogContent.TabIndex = 1;
-            this.txtLogContent.Text = "";
-            // 
-            // pnlLogTabs
-            // 
-            this.pnlLogTabs.AutoSize = true;
-            this.pnlLogTabs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(250)))), ((int)(((byte)(251)))));
-            this.pnlLogTabs.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlLogTabs.Location = new System.Drawing.Point(0, 0);
-            this.pnlLogTabs.Name = "pnlLogTabs";
-            this.pnlLogTabs.Padding = new System.Windows.Forms.Padding(5, 3, 5, 0);
-            this.pnlLogTabs.Size = new System.Drawing.Size(675, 3);
-            this.pnlLogTabs.TabIndex = 0;
-            // 
-            // statusMain
-            // 
-            this.statusMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.lblResourceStatus});
-            this.statusMain.Location = new System.Drawing.Point(0, 629);
-            this.statusMain.Name = "statusMain";
-            this.statusMain.Size = new System.Drawing.Size(694, 22);
-            this.statusMain.TabIndex = 2;
-            this.statusMain.Text = "statusMain";
-            // 
-            // lblResourceStatus
-            // 
-            this.lblResourceStatus.BackColor = System.Drawing.Color.Transparent;
-            this.lblResourceStatus.Name = "lblResourceStatus";
-            this.lblResourceStatus.Size = new System.Drawing.Size(143, 17);
-            this.lblResourceStatus.Text = "总体资源占用: 0% | 0MB";
-            // 
             // colIndex
             // 
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
@@ -354,6 +301,78 @@ namespace NodeDock
             this.colAction.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
             this.colAction.Width = 65;
             // 
+            // pnlLog
+            // 
+            this.pnlLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlLog.BackColor = System.Drawing.Color.White;
+            this.pnlLog.Controls.Add(this.txtLogContent);
+            this.pnlLog.Controls.Add(this.pnlLogTabs);
+            this.pnlLog.Location = new System.Drawing.Point(10, 385);
+            this.pnlLog.Name = "pnlLog";
+            this.pnlLog.Size = new System.Drawing.Size(675, 165);
+            this.pnlLog.TabIndex = 2;
+            // 
+            // txtLogContent
+            // 
+            this.txtLogContent.BackColor = System.Drawing.Color.White;
+            this.txtLogContent.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtLogContent.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtLogContent.Font = new System.Drawing.Font("Consolas", 9F);
+            this.txtLogContent.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(65)))), ((int)(((byte)(85)))));
+            this.txtLogContent.Location = new System.Drawing.Point(0, 3);
+            this.txtLogContent.Name = "txtLogContent";
+            this.txtLogContent.ReadOnly = true;
+            this.txtLogContent.Size = new System.Drawing.Size(675, 162);
+            this.txtLogContent.TabIndex = 1;
+            this.txtLogContent.Text = "";
+            // 
+            // pnlLogTabs
+            // 
+            this.pnlLogTabs.AutoSize = true;
+            this.pnlLogTabs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(250)))), ((int)(((byte)(251)))));
+            this.pnlLogTabs.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pnlLogTabs.Location = new System.Drawing.Point(0, 0);
+            this.pnlLogTabs.Name = "pnlLogTabs";
+            this.pnlLogTabs.Padding = new System.Windows.Forms.Padding(5, 3, 5, 0);
+            this.pnlLogTabs.Size = new System.Drawing.Size(675, 3);
+            this.pnlLogTabs.TabIndex = 0;
+            // 
+            // statusMain
+            // 
+            this.statusMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.lblResourceStatus,
+            this.lblSpring,
+            this.lblVersion});
+            this.statusMain.Location = new System.Drawing.Point(0, 629);
+            this.statusMain.Name = "statusMain";
+            this.statusMain.Size = new System.Drawing.Size(694, 22);
+            this.statusMain.TabIndex = 2;
+            this.statusMain.Text = "statusMain";
+            // 
+            // lblResourceStatus
+            // 
+            this.lblResourceStatus.BackColor = System.Drawing.Color.Transparent;
+            this.lblResourceStatus.Name = "lblResourceStatus";
+            this.lblResourceStatus.Size = new System.Drawing.Size(143, 17);
+            this.lblResourceStatus.Text = "总体资源占用: 0% | 0MB";
+            // 
+            // lblSpring
+            // 
+            this.lblSpring.BackColor = System.Drawing.Color.Transparent;
+            this.lblSpring.Name = "lblSpring";
+            this.lblSpring.Size = new System.Drawing.Size(415, 17);
+            this.lblSpring.Spring = true;
+            // 
+            // lblVersion
+            // 
+            this.lblVersion.BackColor = System.Drawing.Color.Transparent;
+            this.lblVersion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(156)))), ((int)(((byte)(163)))), ((int)(((byte)(175)))));
+            this.lblVersion.Name = "lblVersion";
+            this.lblVersion.Size = new System.Drawing.Size(90, 17);
+            this.lblVersion.Text = "v1.2.1-Win7Fix";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -396,6 +415,8 @@ namespace NodeDock
         private System.Windows.Forms.Button btnSetting;
         private System.Windows.Forms.StatusStrip statusMain;
         private System.Windows.Forms.ToolStripStatusLabel lblResourceStatus;
+        private System.Windows.Forms.ToolStripStatusLabel lblSpring;
+        private System.Windows.Forms.ToolStripStatusLabel lblVersion;
         private System.Windows.Forms.DataGridViewTextBoxColumn colIndex;
         private System.Windows.Forms.DataGridViewTextBoxColumn colName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colStatus;
