@@ -32,6 +32,7 @@ namespace NodeDock
                 txtArgs.Text = app.Arguments;
                 chkAutoStart.Checked = app.AutoStart;
                 chkAutoRestart.Checked = app.EnableAutoRestart;
+                txtEntryUrl.Text = app.EntryUrl;
                 cmbVersion.SelectedItem = cmbVersion.Items.Cast<NodeRuntimeInfo>().FirstOrDefault(r => r.Name == app.NodeVersion);
                 
                 // 编辑模式下也探测版本需求
@@ -154,6 +155,7 @@ namespace NodeDock
             AppInfo.Arguments = txtArgs.Text;
             AppInfo.AutoStart = chkAutoStart.Checked;
             AppInfo.EnableAutoRestart = chkAutoRestart.Checked;
+            AppInfo.EntryUrl = txtEntryUrl.Text;
             AppInfo.NodeVersion = (cmbVersion.SelectedItem as NodeRuntimeInfo)?.Name;
 
             this.DialogResult = DialogResult.OK;

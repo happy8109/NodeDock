@@ -216,6 +216,8 @@ namespace NodeDock
             this.dgvApps.Size = new System.Drawing.Size(675, 369);
             this.dgvApps.TabIndex = 0;
             this.dgvApps.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvApps_CellClick);
+            this.dgvApps.CellMouseEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvApps_CellMouseEnter);
+            this.dgvApps.CellMouseLeave += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvApps_CellMouseLeave);
             this.dgvApps.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvApps_CellPainting);
             this.dgvApps.SelectionChanged += new System.EventHandler(this.dgvApps_SelectionChanged);
             // 
@@ -371,7 +373,7 @@ namespace NodeDock
             this.lblVersion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(156)))), ((int)(((byte)(163)))), ((int)(((byte)(175)))));
             this.lblVersion.Name = "lblVersion";
             this.lblVersion.Size = new System.Drawing.Size(90, 17);
-            this.lblVersion.Text = "v1.2.1-Win7Fix";
+            this.lblVersion.Text = "v1.2.2";
             // 
             // MainForm
             // 

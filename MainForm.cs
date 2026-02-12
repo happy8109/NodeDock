@@ -376,6 +376,7 @@ namespace NodeDock
                 int rowIndex = dgvApps.Rows.Add(index++, app.Name, statusText, "", ports, app.NodeVersion, app.WorkingDirectory, "");
                 dgvApps.Rows[rowIndex].Tag = app;
                 UpdateRowStyle(dgvApps.Rows[rowIndex], app.Status, hasConflict);
+                UpdateNameCellStyle(dgvApps.Rows[rowIndex], app);
             }
             _isLoadingList = false;
         }
@@ -436,6 +437,7 @@ namespace NodeDock
                     row.Cells["colPort"].Value = ports;
 
                     UpdateRowStyle(row, status, hasConflict);
+                    UpdateNameCellStyle(row, app);
                     dgvApps.InvalidateRow(row.Index); // 触发重绘操作按钮
                     
                     // 同步更新日志标签按钮样式
@@ -543,6 +545,20 @@ namespace NodeDock
                     {
                         MessageBox.Show($"无法打开目录: {ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+                }
+                return;
+            }
+
+            // 处理应用名称点击 (如果有关联网址)
+            if (dgvApps.Columns[e.ColumnIndex].Name == "colName" && !string.IsNullOrEmpty(app.EntryUrl))
+            {
+                try
+                {
+                    Process.Start(app.EntryUrl);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"无法打开网址: {ex.Message}", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 return;
             }
@@ -673,6 +689,46 @@ namespace NodeDock
                 ShowMainForm();
             }
             base.WndProc(ref m);
+        }
+
+        private void UpdateNameCellStyle(DataGridViewRow row, Models.AppItem app)
+        {
+            var nameCell = row.Cells["colName"];
+            if (!string.IsNullOrEmpty(app.EntryUrl))
+            {
+                nameCell.Style.ForeColor = Color.FromArgb(59, 130, 246);
+                nameCell.Style.Font = new Font(dgvApps.Font, FontStyle.Underline);
+            }
+            else
+            {
+                nameCell.Style.ForeColor = Color.Empty;
+                nameCell.Style.Font = null;
+            }
+        }
+
+        private void dgvApps_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            {
+                var colName = dgvApps.Columns[e.ColumnIndex].Name;
+                if (colName == "colName" || colName == "colPath")
+                {
+                    var app = dgvApps.Rows[e.RowIndex].Tag as Models.AppItem;
+                    if (app != null)
+                    {
+                        if ((colName == "colName" && !string.IsNullOrEmpty(app.EntryUrl)) || 
+                            (colName == "colPath" && !string.IsNullOrEmpty(app.WorkingDirectory)))
+                        {
+                            dgvApps.Cursor = Cursors.Hand;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void dgvApps_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
+        {
+            dgvApps.Cursor = Cursors.Default;
         }
     }
 }

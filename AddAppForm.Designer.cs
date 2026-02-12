@@ -34,6 +34,8 @@ namespace NodeDock
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.lblEntryUrl = new System.Windows.Forms.Label();
+            this.txtEntryUrl = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -158,22 +160,41 @@ namespace NodeDock
             // chkAutoStart
             // 
             this.chkAutoStart.AutoSize = true;
-            this.chkAutoStart.Location = new System.Drawing.Point(120, 220);
+            this.chkAutoStart.Location = new System.Drawing.Point(120, 250);
             this.chkAutoStart.Name = "chkAutoStart";
             this.chkAutoStart.Size = new System.Drawing.Size(132, 16);
-            this.chkAutoStart.TabIndex = 12;
+            this.chkAutoStart.TabIndex = 13;
             this.chkAutoStart.Text = "管理器启动时自启动";
             this.chkAutoStart.UseVisualStyleBackColor = true;
             // 
             // chkAutoRestart
             // 
             this.chkAutoRestart.AutoSize = true;
-            this.chkAutoRestart.Location = new System.Drawing.Point(260, 220);
+            this.chkAutoRestart.Location = new System.Drawing.Point(260, 250);
             this.chkAutoRestart.Name = "chkAutoRestart";
             this.chkAutoRestart.Size = new System.Drawing.Size(132, 16);
-            this.chkAutoRestart.TabIndex = 15;
+            this.chkAutoRestart.TabIndex = 14;
             this.chkAutoRestart.Text = "异常退出时自动重启";
             this.chkAutoRestart.UseVisualStyleBackColor = true;
+            // 
+            // lblEntryUrl
+            // 
+            this.lblEntryUrl.AutoSize = true;
+            this.lblEntryUrl.Location = new System.Drawing.Point(30, 220);
+            this.lblEntryUrl.Name = "lblEntryUrl";
+            this.lblEntryUrl.Size = new System.Drawing.Size(65, 12);
+            this.lblEntryUrl.TabIndex = 16;
+            this.lblEntryUrl.Text = "入口网址：";
+            // 
+            // txtEntryUrl
+            // 
+            this.txtEntryUrl.BackColor = System.Drawing.Color.White;
+            this.txtEntryUrl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtEntryUrl.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(17)))), ((int)(((byte)(24)))), ((int)(((byte)(39)))));
+            this.txtEntryUrl.Location = new System.Drawing.Point(120, 217);
+            this.txtEntryUrl.Name = "txtEntryUrl";
+            this.txtEntryUrl.Size = new System.Drawing.Size(280, 21);
+            this.txtEntryUrl.TabIndex = 12;
             // 
             // btnDownloadNode
             // 
@@ -188,13 +209,10 @@ namespace NodeDock
             // 
             // btnSave
             // 
-            this.btnSave.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(130)))), ((int)(((byte)(246)))));
-            this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSave.ForeColor = System.Drawing.Color.White;
-            this.btnSave.Location = new System.Drawing.Point(240, 260);
+            this.btnSave.Location = new System.Drawing.Point(240, 290);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 30);
-            this.btnSave.TabIndex = 13;
+            this.btnSave.TabIndex = 15;
             this.btnSave.Text = "保存";
             this.btnSave.UseVisualStyleBackColor = false;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
@@ -204,10 +222,10 @@ namespace NodeDock
             this.btnCancel.BackColor = System.Drawing.Color.White;
             this.btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCancel.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(65)))), ((int)(((byte)(81)))));
-            this.btnCancel.Location = new System.Drawing.Point(325, 260);
+            this.btnCancel.Location = new System.Drawing.Point(325, 290);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 30);
-            this.btnCancel.TabIndex = 14;
+            this.btnCancel.TabIndex = 16;
             this.btnCancel.Text = "取消";
             this.btnCancel.UseVisualStyleBackColor = false;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -217,7 +235,9 @@ namespace NodeDock
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(249)))), ((int)(((byte)(250)))), ((int)(((byte)(251)))));
-            this.ClientSize = new System.Drawing.Size(434, 311);
+            this.ClientSize = new System.Drawing.Size(434, 341);
+            this.Controls.Add(this.txtEntryUrl);
+            this.Controls.Add(this.lblEntryUrl);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.chkAutoRestart);
@@ -265,5 +285,7 @@ namespace NodeDock
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnDownloadNode;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.Label lblEntryUrl;
+        private System.Windows.Forms.TextBox txtEntryUrl;
     }
 }

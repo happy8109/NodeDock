@@ -38,6 +38,11 @@ namespace NodeDock.Models
         public string Arguments { get; set; }
 
         /// <summary>
+        /// 应用程序入口网址 (如 http://localhost:3000)
+        /// </summary>
+        public string EntryUrl { get; set; }
+
+        /// <summary>
         /// 是否随管理器启动而自动启动
         /// </summary>
         public bool AutoStart { get; set; }
